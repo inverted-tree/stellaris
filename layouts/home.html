@@ -76,8 +76,13 @@
       {{ if $rest }}
         {{ range first 4 $rest }}
         <a href="{{ .RelPermalink }}" class="bento-post-row">
-          <span class="bento-post-title">{{ .Title }}</span>
-          <time class="bento-post-date">{{ .Date.Format "Jan 2, 2006" }}</time>
+          <div class="bento-post-main">
+            <span class="bento-post-title">{{ .Title }}</span>
+            <time class="bento-post-date">{{ .Date.Format "Jan 2, 2006" }}</time>
+          </div>
+          {{ with .Description }}
+          <p class="bento-post-desc">{{ . }}</p>
+          {{ end }}
         </a>
         {{ end }}
       {{ else }}
@@ -90,7 +95,7 @@
   {{ with site.GetPage "/projects" }}
     {{ $sections := .Sections.ByWeight }}
     {{ if $sections }}
-    {{ $duration := printf "%.1fs" (mul (float (len $sections)) 5.0) }}
+    {{ $duration := printf "%.1fs" (mul (float (len $sections)) 10.0) }}
     <div class="projects-ticker" style="--ticker-duration: {{ $duration }}">
       <div class="projects-track">
         {{ range $sections }}

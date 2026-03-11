@@ -1379,8 +1379,7 @@ a.bento-card:hover .bento-card-arrow {
 
 .bento-post-row {
   display: flex;
-  align-items: baseline;
-  gap: 0.75rem;
+  flex-direction: column;
   padding: 0.5rem 0;
   border-top: 1px solid var(--border);
   text-decoration: none;
@@ -1388,6 +1387,12 @@ a.bento-card:hover .bento-card-arrow {
 
 .bento-post-row:first-child {
   border-top: none;
+}
+
+.bento-post-main {
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
 }
 
 .bento-posts-empty {
@@ -1401,7 +1406,6 @@ a.bento-card:hover .bento-card-arrow {
   flex: 1;
   font-size: 0.875rem;
   color: var(--text);
-  transition: color 0.12s;
 }
 
 .bento-post-row:hover .bento-post-title {
@@ -1413,6 +1417,19 @@ a.bento-card:hover .bento-card-arrow {
   color: var(--text-faint);
   font-variant-numeric: tabular-nums;
   flex-shrink: 0;
+}
+
+.bento-post-desc {
+  margin-top: 0.25rem;
+  margin-bottom: 0;
+  font-size: 0.775rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  max-height: 2.4rem;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
 /* ============================================================
