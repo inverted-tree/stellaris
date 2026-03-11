@@ -23,10 +23,16 @@
 
 <div class="bento-grid">
 
-  {{/* Projects — first is featured (wide), rest are regular */}}
+  {{/* Projects — configured or first-by-weight is featured (wide), rest are regular */}}
   {{ with site.GetPage "/projects" }}
     {{ $sections := .Sections.ByWeight }}
-    {{ with index $sections 0 }}
+    {{ $featured := index $sections 0 }}
+    {{ with site.Params.featuredProject }}
+      {{ with site.GetPage (printf "/projects/%s" .) }}
+        {{ $featured = . }}
+      {{ end }}
+    {{ end }}
+    {{ with $featured }}
     <a href="{{ .RelPermalink }}" class="bento-card bento-card--featured">
       <div class="bento-card-eyebrow">Featured Project</div>
       <h2 class="bento-card-title">{{ .Title }}</h2>
@@ -39,18 +45,20 @@
       </div>
     </a>
     {{ end }}
-    {{ range after 1 $sections }}
-    <a href="{{ .RelPermalink }}" class="bento-card bento-card--project">
-      <div class="bento-card-eyebrow">Project</div>
-      <h2 class="bento-card-title">{{ .Title }}</h2>
-      {{ with .Description }}
-      <p class="bento-card-desc">{{ . }}</p>
+    {{ range $sections }}
+      {{ if ne . $featured }}
+      <a href="{{ .RelPermalink }}" class="bento-card bento-card--project">
+        <div class="bento-card-eyebrow">Project</div>
+        <h2 class="bento-card-title">{{ .Title }}</h2>
+        {{ with .Description }}
+        <p class="bento-card-desc">{{ . }}</p>
+        {{ end }}
+        <div class="bento-card-footer">
+          <span class="bento-card-count">{{ len .RegularPages }} posts</span>
+          <span class="bento-card-arrow">→</span>
+        </div>
+      </a>
       {{ end }}
-      <div class="bento-card-footer">
-        <span class="bento-card-count">{{ len .RegularPages }} posts</span>
-        <span class="bento-card-arrow">→</span>
-      </div>
-    </a>
     {{ end }}
   {{ end }}
 
