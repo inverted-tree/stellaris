@@ -1,9 +1,64 @@
 {{ define "main" }}
-  {{ .Content }}
-  {{ range site.RegularPages }}
-    <section>
-      <h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2>
-      {{ .Summary }}
-    </section>
+
+<section class="hero">
+  <p class="hero-eyebrow">{{ site.Title }}</p>
+  <h1 class="hero-title">{{ with site.Params.heroTitle }}{{ . }}{{ else }}Writing about<br><em>things I build</em>{{ end }}</h1>
+  {{ with site.Params.description }}
+  <p class="hero-subtitle">{{ . }}</p>
   {{ end }}
+  <div class="hero-actions">
+    {{ with site.GetPage "/projects" }}
+    <a href="{{ .RelPermalink }}" class="btn btn--primary">Browse Projects</a>
+    {{ end }}
+    {{ with site.GetPage "/posts" }}
+    <a href="{{ .RelPermalink }}" class="btn btn--secondary">Read Posts</a>
+    {{ end }}
+  </div>
+</section>
+
+{{/* Projects section */}}
+{{ with site.GetPage "/projects" }}
+  {{ if .Sections }}
+  <section class="home-section">
+    <div class="home-section-header">
+      <h2 class="home-section-title">Projects</h2>
+      <a href="{{ .RelPermalink }}" class="home-section-link">View all →</a>
+    </div>
+    <div class="project-tiles">
+      {{ range .Sections.ByWeight }}
+      <a href="{{ .RelPermalink }}" class="project-tile">
+        <span class="project-tile-title">{{ .Title }}</span>
+        {{ with .Description }}
+        <span class="project-tile-desc">{{ . }}</span>
+        {{ end }}
+        <div class="project-tile-meta">
+          <span class="project-tile-count">{{ len .RegularPages }} posts</span>
+        </div>
+      </a>
+      {{ end }}
+    </div>
+  </section>
+  {{ end }}
+{{ end }}
+
+{{/* Recent standalone posts */}}
+{{ with site.GetPage "/posts" }}
+  {{ if .RegularPages }}
+  <section class="home-section">
+    <div class="home-section-header">
+      <h2 class="home-section-title">Recent Posts</h2>
+      <a href="{{ .RelPermalink }}" class="home-section-link">View all →</a>
+    </div>
+    <div class="recent-posts-list">
+      {{ range first 6 .RegularPages.ByDate.Reverse }}
+      <a href="{{ .RelPermalink }}" class="recent-post-item">
+        <span class="recent-post-title">{{ .Title }}</span>
+        <time class="recent-post-date">{{ .Date.Format "Jan 2006" }}</time>
+      </a>
+      {{ end }}
+    </div>
+  </section>
+  {{ end }}
+{{ end }}
+
 {{ end }}

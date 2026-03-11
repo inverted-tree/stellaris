@@ -4,14 +4,42 @@
   {{ partial "head.html" . }}
 </head>
 <body>
-  <header>
+
+{{/* Checkbox for CSS-only mobile sidebar toggle */}}
+<input type="checkbox" id="sidebar-toggle" hidden>
+
+<div class="site-layout">
+
+  <header class="topbar">
     {{ partial "header.html" . }}
   </header>
-  <main>
+
+  {{- if .IsHome }}
+  <main class="main-content main-content--home">
     {{ block "main" . }}{{ end }}
   </main>
-  <footer>
+  {{- else }}
+  {{- $hasToc := and .TableOfContents (ne .Kind "taxonomy") (ne .Kind "term") (ne .Kind "section") }}
+  <div class="body-wrap{{ if $hasToc }} body-wrap--toc{{ end }}">
+    <label for="sidebar-toggle" class="sidebar-overlay" aria-hidden="true"></label>
+    <aside class="sidebar">
+      {{ partial "sidebar.html" . }}
+    </aside>
+    <main class="main-content">
+      {{ block "main" . }}{{ end }}
+    </main>
+    {{- if $hasToc }}
+    <aside class="toc-col" aria-label="Table of contents">
+      {{ partial "toc.html" . }}
+    </aside>
+    {{- end }}
+  </div>
+  {{- end }}
+
+  <footer class="site-footer">
     {{ partial "footer.html" . }}
   </footer>
+
+</div>
 </body>
 </html>

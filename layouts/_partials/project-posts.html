@@ -1,0 +1,19 @@
+{{/* Show a series strip when the post lives inside a project sub-section
+     (i.e. its parent section has more than one post) */}}
+{{ $page := . }}
+{{ if and .Parent (not .Parent.IsHome) .Parent.IsSection }}
+  {{ if gt (len .Parent.RegularPages) 1 }}
+  <nav class="series-strip" aria-label="Other posts in this series">
+    <div class="series-strip-label">Part of</div>
+    <a href="{{ .Parent.RelPermalink }}" class="series-strip-title">{{ .Parent.Title }}</a>
+    <div class="series-posts-list">
+      {{ range $i, $p := .Parent.RegularPages.ByDate }}
+      <a href="{{ $p.RelPermalink }}" class="series-post-link{{ if eq $p $page }} series-post-link--current{{ end }}">
+        <span class="series-post-num">{{ printf "%02d" (add $i 1) }}</span>
+        <span class="series-post-name">{{ $p.Title }}</span>
+      </a>
+      {{ end }}
+    </div>
+  </nav>
+  {{ end }}
+{{ end }}

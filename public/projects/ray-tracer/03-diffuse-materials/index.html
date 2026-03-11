@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diffuse Materials and Monte Carlo Sampling | Stellaris</title>
+<meta name="description" content="Implementing Lambertian diffuse shading using Monte Carlo integration and random hemisphere sampling.">
+
+<meta name="color-scheme" content="dark">
+
+    <link rel="stylesheet" href="/css/main.css">
+
+
+      <script src="/js/main.js"></script>
+
+
+</head>
+<body>
+
+
+<input type="checkbox" id="sidebar-toggle" hidden>
+
+<div class="site-layout">
+
+  <header class="topbar">
+    <a href="/" class="site-logo">Stellaris</a>
+
+<div class="topbar-spacer"></div>
+
+<nav class="topbar-links" aria-label="Main navigation">
+  
+  <a href="/projects/" class="topbar-link">Projects</a>
+  
+  
+  <a href="/posts/" class="topbar-link">Posts</a>
+  
+  <a href="/tags/" class="topbar-link">Tags</a>
+</nav>
+
+<button class="sidebar-toggle-btn" aria-label="Toggle navigation" onclick="document.getElementById('sidebar-toggle').checked = !document.getElementById('sidebar-toggle').checked">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+
+  </header>
+  <div class="body-wrap body-wrap--toc">
+    <label for="sidebar-toggle" class="sidebar-overlay" aria-hidden="true"></label>
+    <aside class="sidebar">
+      
+
+<nav class="sidebar-nav" aria-label="Site navigation">
+  <ul class="nav-list">
+
+    
+    <li>
+      <a href="/" class="nav-link">
+        Home
+      </a>
+    </li>
+
+    
+    
+    
+    
+
+    <li class="nav-section-item">
+      <div class="nav-section-label">Projects</div>
+
+      <ul class="nav-list nav-list--nested">
+
+        
+        
+        
+        
+
+        <li>
+          <details class="nav-subsection" open>
+            <summary>
+              <svg class="nav-arrow" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <a href="/projects/ray-tracer/" class="nav-summary-link">
+                Building a Ray Tracer
+              </a>
+            </summary>
+            <ul class="nav-list nav-list--deep">
+              
+              <li>
+                <a href="/projects/ray-tracer/01-introduction/" class="nav-link">
+                  Why Write a Ray Tracer?
+                </a>
+              </li>
+              
+              <li>
+                <a href="/projects/ray-tracer/02-sphere-intersection/" class="nav-link">
+                  Sphere Intersection and the First Image
+                </a>
+              </li>
+              
+              <li>
+                <a href="/projects/ray-tracer/03-diffuse-materials/" class="nav-link nav-link--active">
+                  Diffuse Materials and Monte Carlo Sampling
+                </a>
+              </li>
+              
+            </ul>
+          </details>
+        </li>
+        
+        
+        
+
+        <li>
+          <details class="nav-subsection">
+            <summary>
+              <svg class="nav-arrow" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <a href="/projects/type-system-explorations/" class="nav-summary-link">
+                Type System Explorations
+              </a>
+            </summary>
+            <ul class="nav-list nav-list--deep">
+              
+              <li>
+                <a href="/projects/type-system-explorations/01-typestate/" class="nav-link">
+                  Typestate Pattern in Rust
+                </a>
+              </li>
+              
+            </ul>
+          </details>
+        </li>
+        
+
+        
+        
+
+      </ul>
+    </li>
+    
+    
+    
+
+    <li class="nav-section-item">
+      <div class="nav-section-label">Posts</div>
+
+      <ul class="nav-list nav-list--nested">
+
+        
+        
+
+        
+        
+        <li>
+          <a href="/posts/post-3/" class="nav-link">
+            Post 3
+          </a>
+        </li>
+        
+        <li>
+          <a href="/posts/post-2/" class="nav-link">
+            Post 2
+          </a>
+        </li>
+        
+        <li>
+          <a href="/posts/post-1/" class="nav-link">
+            Post 1
+          </a>
+        </li>
+        
+
+      </ul>
+    </li>
+    
+
+    <li><div class="nav-divider"></div></li>
+
+    <li>
+      <a href="/tags/" class="nav-link">
+        Tags
+      </a>
+    </li>
+
+  </ul>
+</nav>
+
+    </aside>
+    <main class="main-content">
+      
+<article>
+  <header class="post-header">
+    <h1 class="post-title">Diffuse Materials and Monte Carlo Sampling</h1>
+    <div class="post-meta">
+      <time datetime="2024-02-07T00:00:00&#43;00:00">
+        February 7, 2024
+      </time>
+      
+        
+        <span class="post-meta-sep">·</span>
+        <a href="/projects/ray-tracer/" class="tag-pill">Building a Ray Tracer</a>
+        
+      
+      
+<a href="/tags/rust/" class="tag-pill">Rust</a>
+<a href="/tags/graphics/" class="tag-pill">Graphics</a>
+<a href="/tags/math/" class="tag-pill">Math</a>
+<a href="/tags/probability/" class="tag-pill">Probability</a>
+
+    </div>
+  </header>
+
+  <div class="prose">
+    <p>Diffuse surfaces scatter incoming light in all directions roughly equally. The physically correct model is Lambertian reflectance, where the probability of scattering in a given direction is proportional to the cosine of the angle with the surface normal.</p>
+<h2 id="monte-carlo-integration">Monte Carlo Integration</h2>
+<p>We cannot analytically integrate over all possible incoming light directions, so we use Monte Carlo sampling: pick a random direction, trace a ray in that direction, and average many samples. The expected value converges to the true integral as sample count increases.</p>
+<p>For a Lambertian surface, we want to sample directions with probability proportional to $\cos\theta$ where $\theta$ is the angle from the normal. The trick is to pick a random point on the unit sphere and add it to the surface normal:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="k">fn</span> <span class="nf">random_in_unit_sphere</span><span class="p">(</span><span class="n">rng</span>: <span class="kp">&amp;</span><span class="nc">mut</span><span class="w"> </span><span class="k">impl</span><span class="w"> </span><span class="n">Rng</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nc">Vec3</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">loop</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Vec3</span>::<span class="n">new</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">rng</span><span class="p">.</span><span class="n">gen_range</span><span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="mi">0</span><span class="o">..</span><span class="mf">1.0</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">rng</span><span class="p">.</span><span class="n">gen_range</span><span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="mi">0</span><span class="o">..</span><span class="mf">1.0</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">rng</span><span class="p">.</span><span class="n">gen_range</span><span class="p">(</span><span class="o">-</span><span class="mf">1.</span><span class="mi">0</span><span class="o">..</span><span class="mf">1.0</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="n">p</span><span class="p">.</span><span class="n">length_squared</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="mf">1.0</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">return</span><span class="w"> </span><span class="n">p</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">pub</span><span class="w"> </span><span class="k">fn</span> <span class="nf">scatter_lambertian</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">hit</span>: <span class="kp">&amp;</span><span class="nc">HitRecord</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">rng</span>: <span class="kp">&amp;</span><span class="nc">mut</span><span class="w"> </span><span class="k">impl</span><span class="w"> </span><span class="n">Rng</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">)</span><span class="w"> </span>-&gt; <span class="nb">Option</span><span class="o">&lt;</span><span class="p">(</span><span class="n">Ray</span><span class="p">,</span><span class="w"> </span><span class="n">Vec3</span><span class="p">)</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">scatter_direction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">hit</span><span class="p">.</span><span class="n">normal</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">random_in_unit_sphere</span><span class="p">(</span><span class="n">rng</span><span class="p">).</span><span class="n">normalize</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// Catch degenerate scatter direction (near-zero vector)
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">scatter_direction</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">scatter_direction</span><span class="p">.</span><span class="n">near_zero</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">hit</span><span class="p">.</span><span class="n">normal</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">scatter_direction</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">};</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">scattered</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Ray</span>::<span class="n">new</span><span class="p">(</span><span class="n">hit</span><span class="p">.</span><span class="n">point</span><span class="p">,</span><span class="w"> </span><span class="n">scatter_direction</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">attenuation</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="cm">/* material albedo color */</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nb">Some</span><span class="p">((</span><span class="n">scattered</span><span class="p">,</span><span class="w"> </span><span class="n">attenuation</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><h2 id="gamma-correction">Gamma Correction</h2>
+<p>Raw linear output looks too dark because monitors apply a gamma curve ($\gamma \approx 2.2$). We store linear radiance values but must gamma-encode before writing pixels:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="k">fn</span> <span class="nf">linear_to_gamma</span><span class="p">(</span><span class="n">linear</span>: <span class="kt">f32</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="kt">f32</span> <span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">linear</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.0</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">linear</span><span class="p">.</span><span class="n">sqrt</span><span class="p">()</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="mf">0.0</span><span class="w"> </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">fn</span> <span class="nf">write_pixel</span><span class="p">(</span><span class="n">color</span>: <span class="nc">Vec3</span><span class="p">,</span><span class="w"> </span><span class="n">samples</span>: <span class="kt">u32</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="p">[</span><span class="kt">u8</span><span class="p">;</span><span class="w"> </span><span class="mi">3</span><span class="p">]</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">scale</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1.0</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">samples</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">f32</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">[</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">(</span><span class="n">linear_to_gamma</span><span class="p">(</span><span class="n">color</span><span class="p">.</span><span class="n">x</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">scale</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">255.99</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u8</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">(</span><span class="n">linear_to_gamma</span><span class="p">(</span><span class="n">color</span><span class="p">.</span><span class="n">y</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">scale</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">255.99</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u8</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">(</span><span class="n">linear_to_gamma</span><span class="p">(</span><span class="n">color</span><span class="p">.</span><span class="n">z</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">scale</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mf">255.99</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u8</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p>Using <code>sqrt</code> as the gamma function is an approximation of $x^{1/2.2}$, but it is close enough and avoids a <code>powf</code> call in the hot path.</p>
+<h2 id="recursion-depth">Recursion Depth</h2>
+<p>The path tracer recurses: a scattered ray may itself bounce off another surface. Without a depth limit, this recurses infinitely. In practice, each bounce attenuates the energy, so the contribution of deep bounces becomes negligible. We cap at a depth of around 50 and return black when exceeded.</p>
+<p>The full rendering loop with per-pixel sampling and depth limiting is the foundation that all future material types will build on.</p>
+
+  </div>
+
+  
+
+
+  
+  <nav class="series-strip" aria-label="Other posts in this series">
+    <div class="series-strip-label">Part of</div>
+    <a href="/projects/ray-tracer/" class="series-strip-title">Building a Ray Tracer</a>
+    <div class="series-posts-list">
+      
+      <a href="/projects/ray-tracer/01-introduction/" class="series-post-link">
+        <span class="series-post-num">01</span>
+        <span class="series-post-name">Why Write a Ray Tracer?</span>
+      </a>
+      
+      <a href="/projects/ray-tracer/02-sphere-intersection/" class="series-post-link">
+        <span class="series-post-num">02</span>
+        <span class="series-post-name">Sphere Intersection and the First Image</span>
+      </a>
+      
+      <a href="/projects/ray-tracer/03-diffuse-materials/" class="series-post-link series-post-link--current">
+        <span class="series-post-num">03</span>
+        <span class="series-post-name">Diffuse Materials and Monte Carlo Sampling</span>
+      </a>
+      
+    </div>
+  </nav>
+  
+
+
+</article>
+
+    </main>
+    <aside class="toc-col" aria-label="Table of contents">
+      
+<p class="toc-heading">On this page</p>
+<nav class="toc-nav" aria-label="Table of contents">
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#monte-carlo-integration">Monte Carlo Integration</a></li>
+    <li><a href="#gamma-correction">Gamma Correction</a></li>
+    <li><a href="#recursion-depth">Recursion Depth</a></li>
+  </ul>
+</nav>
+</nav>
+
+
+    </aside>
+  </div>
+
+  <footer class="site-footer">
+    <span>© 2026 Stellaris</span>
+<div class="footer-links">
+</div>
+
+  </footer>
+
+</div>
+</body>
+</html>

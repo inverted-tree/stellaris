@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en-US" dir="ltr">
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why Write a Ray Tracer? | Stellaris</title>
+<meta name="description" content="Motivation, goals, and the math foundations before writing a single line of code.">
+
+<meta name="color-scheme" content="dark">
+
+    <link rel="stylesheet" href="/css/main.css">
+
+
+      <script src="/js/main.js"></script>
+
+
+</head>
+<body>
+
+
+<input type="checkbox" id="sidebar-toggle" hidden>
+
+<div class="site-layout">
+
+  <header class="topbar">
+    <a href="/" class="site-logo">Stellaris</a>
+
+<div class="topbar-spacer"></div>
+
+<nav class="topbar-links" aria-label="Main navigation">
+  
+  <a href="/projects/" class="topbar-link">Projects</a>
+  
+  
+  <a href="/posts/" class="topbar-link">Posts</a>
+  
+  <a href="/tags/" class="topbar-link">Tags</a>
+</nav>
+
+<button class="sidebar-toggle-btn" aria-label="Toggle navigation" onclick="document.getElementById('sidebar-toggle').checked = !document.getElementById('sidebar-toggle').checked">
+  <span></span>
+  <span></span>
+  <span></span>
+</button>
+
+  </header>
+  <div class="body-wrap body-wrap--toc">
+    <label for="sidebar-toggle" class="sidebar-overlay" aria-hidden="true"></label>
+    <aside class="sidebar">
+      
+
+<nav class="sidebar-nav" aria-label="Site navigation">
+  <ul class="nav-list">
+
+    
+    <li>
+      <a href="/" class="nav-link">
+        Home
+      </a>
+    </li>
+
+    
+    
+    
+    
+
+    <li class="nav-section-item">
+      <div class="nav-section-label">Projects</div>
+
+      <ul class="nav-list nav-list--nested">
+
+        
+        
+        
+        
+
+        <li>
+          <details class="nav-subsection" open>
+            <summary>
+              <svg class="nav-arrow" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <a href="/projects/ray-tracer/" class="nav-summary-link">
+                Building a Ray Tracer
+              </a>
+            </summary>
+            <ul class="nav-list nav-list--deep">
+              
+              <li>
+                <a href="/projects/ray-tracer/01-introduction/" class="nav-link nav-link--active">
+                  Why Write a Ray Tracer?
+                </a>
+              </li>
+              
+              <li>
+                <a href="/projects/ray-tracer/02-sphere-intersection/" class="nav-link">
+                  Sphere Intersection and the First Image
+                </a>
+              </li>
+              
+              <li>
+                <a href="/projects/ray-tracer/03-diffuse-materials/" class="nav-link">
+                  Diffuse Materials and Monte Carlo Sampling
+                </a>
+              </li>
+              
+            </ul>
+          </details>
+        </li>
+        
+        
+        
+
+        <li>
+          <details class="nav-subsection">
+            <summary>
+              <svg class="nav-arrow" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <a href="/projects/type-system-explorations/" class="nav-summary-link">
+                Type System Explorations
+              </a>
+            </summary>
+            <ul class="nav-list nav-list--deep">
+              
+              <li>
+                <a href="/projects/type-system-explorations/01-typestate/" class="nav-link">
+                  Typestate Pattern in Rust
+                </a>
+              </li>
+              
+            </ul>
+          </details>
+        </li>
+        
+
+        
+        
+
+      </ul>
+    </li>
+    
+    
+    
+
+    <li class="nav-section-item">
+      <div class="nav-section-label">Posts</div>
+
+      <ul class="nav-list nav-list--nested">
+
+        
+        
+
+        
+        
+        <li>
+          <a href="/posts/post-3/" class="nav-link">
+            Post 3
+          </a>
+        </li>
+        
+        <li>
+          <a href="/posts/post-2/" class="nav-link">
+            Post 2
+          </a>
+        </li>
+        
+        <li>
+          <a href="/posts/post-1/" class="nav-link">
+            Post 1
+          </a>
+        </li>
+        
+
+      </ul>
+    </li>
+    
+
+    <li><div class="nav-divider"></div></li>
+
+    <li>
+      <a href="/tags/" class="nav-link">
+        Tags
+      </a>
+    </li>
+
+  </ul>
+</nav>
+
+    </aside>
+    <main class="main-content">
+      
+<article>
+  <header class="post-header">
+    <h1 class="post-title">Why Write a Ray Tracer?</h1>
+    <div class="post-meta">
+      <time datetime="2024-01-10T00:00:00&#43;00:00">
+        January 10, 2024
+      </time>
+      
+        
+        <span class="post-meta-sep">·</span>
+        <a href="/projects/ray-tracer/" class="tag-pill">Building a Ray Tracer</a>
+        
+      
+      
+<a href="/tags/rust/" class="tag-pill">Rust</a>
+<a href="/tags/graphics/" class="tag-pill">Graphics</a>
+<a href="/tags/math/" class="tag-pill">Math</a>
+
+    </div>
+  </header>
+
+  <div class="prose">
+    <p>Ray tracing is one of those topics that sits at the intersection of physics, linear algebra, and software engineering in a way that feels almost magical when it first works. You write a few hundred lines of code, point a virtual camera at some spheres, and get a photorealistic image with shadows and reflections. This series documents building one from scratch.</p>
+<h2 id="what-we-are-building">What We Are Building</h2>
+<p>The goal is a CPU-bound path tracer capable of rendering scenes with:</p>
+<ul>
+<li>Diffuse, metallic, and dielectric materials</li>
+<li>Point lights and area lights</li>
+<li>A bounding volume hierarchy (BVH) for scene acceleration</li>
+<li>Multi-threaded rendering using Rayon</li>
+</ul>
+<p>No GPU, no CUDA, no fancy APIs. Just vectors, rays, and math.</p>
+<h2 id="the-core-abstraction">The Core Abstraction</h2>
+<p>Everything in a ray tracer starts with a <code>Ray</code>. A ray is just an origin point and a direction vector, parameterized by <code>t</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="cp">#[derive(Clone, Copy, Debug)]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">pub</span><span class="w"> </span><span class="k">struct</span> <span class="nc">Ray</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">origin</span>: <span class="nc">Vec3</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">direction</span>: <span class="nc">Vec3</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">impl</span><span class="w"> </span><span class="n">Ray</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span> <span class="nf">new</span><span class="p">(</span><span class="n">origin</span>: <span class="nc">Vec3</span><span class="p">,</span><span class="w"> </span><span class="n">direction</span>: <span class="nc">Vec3</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nc">Self</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="bp">Self</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">origin</span><span class="p">,</span><span class="w"> </span><span class="n">direction</span>: <span class="nc">direction</span><span class="p">.</span><span class="n">normalize</span><span class="p">()</span><span class="w"> </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span> <span class="nf">at</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">t</span>: <span class="kt">f32</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nc">Vec3</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="bp">self</span><span class="p">.</span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">direction</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p>The <code>at(t)</code> method gives you the point along the ray at parameter <code>t</code>. Intersection testing is entirely about finding the right value of <code>t</code>.</p>
+<h2 id="vector-math">Vector Math</h2>
+<p>All of this rests on three-component vectors. Rather than pulling in a dependency like <code>glam</code>, we&rsquo;ll implement a minimal <code>Vec3</code> type. The operations we need are:</p>
+<ul>
+<li>Component-wise addition, subtraction, and multiplication</li>
+<li>Dot product and cross product</li>
+<li>Length and normalization</li>
+<li>Reflection and refraction (for materials)</li>
+</ul>
+<p>The dot product $\mathbf{a} \cdot \mathbf{b} = a_x b_x + a_y b_y + a_z b_z$ will come up constantly — it encodes the cosine of the angle between two unit vectors, which is fundamental to lighting calculations.</p>
+<h2 id="next-steps">Next Steps</h2>
+<p>In the next post we will implement the first working renderer: a simple sphere intersector that produces a color-by-normal image. No lighting yet, but it will prove all the plumbing works.</p>
+
+  </div>
+
+  
+
+
+  
+  <nav class="series-strip" aria-label="Other posts in this series">
+    <div class="series-strip-label">Part of</div>
+    <a href="/projects/ray-tracer/" class="series-strip-title">Building a Ray Tracer</a>
+    <div class="series-posts-list">
+      
+      <a href="/projects/ray-tracer/01-introduction/" class="series-post-link series-post-link--current">
+        <span class="series-post-num">01</span>
+        <span class="series-post-name">Why Write a Ray Tracer?</span>
+      </a>
+      
+      <a href="/projects/ray-tracer/02-sphere-intersection/" class="series-post-link">
+        <span class="series-post-num">02</span>
+        <span class="series-post-name">Sphere Intersection and the First Image</span>
+      </a>
+      
+      <a href="/projects/ray-tracer/03-diffuse-materials/" class="series-post-link">
+        <span class="series-post-num">03</span>
+        <span class="series-post-name">Diffuse Materials and Monte Carlo Sampling</span>
+      </a>
+      
+    </div>
+  </nav>
+  
+
+
+</article>
+
+    </main>
+    <aside class="toc-col" aria-label="Table of contents">
+      
+<p class="toc-heading">On this page</p>
+<nav class="toc-nav" aria-label="Table of contents">
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#what-we-are-building">What We Are Building</a></li>
+    <li><a href="#the-core-abstraction">The Core Abstraction</a></li>
+    <li><a href="#vector-math">Vector Math</a></li>
+    <li><a href="#next-steps">Next Steps</a></li>
+  </ul>
+</nav>
+</nav>
+
+
+    </aside>
+  </div>
+
+  <footer class="site-footer">
+    <span>© 2026 Stellaris</span>
+<div class="footer-links">
+</div>
+
+  </footer>
+
+</div>
+</body>
+</html>

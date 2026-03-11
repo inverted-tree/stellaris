@@ -1,0 +1,73 @@
+{{- $currentPage := . }}
+
+<nav class="sidebar-nav" aria-label="Site navigation">
+  <ul class="nav-list">
+
+    {{/* Home link */}}
+    <li>
+      <a href="{{ "/" | relURL }}" class="nav-link{{ if .IsHome }} nav-link--active{{ end }}">
+        Home
+      </a>
+    </li>
+
+    {{/* Top-level sections (Projects, Posts, etc.) */}}
+    {{ range site.Sections.ByWeight }}
+    {{ $section := . }}
+    {{ $isActive := or (eq $currentPage $section) ($currentPage.IsDescendant $section) }}
+
+    <li class="nav-section-item">
+      <div class="nav-section-label">{{ $section.Title }}</div>
+
+      <ul class="nav-list nav-list--nested">
+
+        {{/* Sub-sections: e.g. individual projects within /projects/ */}}
+        {{ range $section.Sections.ByWeight }}
+        {{ $sub := . }}
+        {{ $subActive := or (eq $currentPage $sub) ($currentPage.IsDescendant $sub) }}
+
+        <li>
+          <details class="nav-subsection"{{ if $subActive }} open{{ end }}>
+            <summary>
+              <svg class="nav-arrow" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              <a href="{{ $sub.RelPermalink }}" class="nav-summary-link{{ if eq $currentPage $sub }} nav-link--active{{ end }}">
+                {{ $sub.Title }}
+              </a>
+            </summary>
+            <ul class="nav-list nav-list--deep">
+              {{ range $sub.RegularPages.ByDate }}
+              <li>
+                <a href="{{ .RelPermalink }}" class="nav-link{{ if eq $currentPage . }} nav-link--active{{ end }}">
+                  {{ .Title }}
+                </a>
+              </li>
+              {{ end }}
+            </ul>
+          </details>
+        </li>
+        {{ end }}
+
+        {{/* Direct pages in this section (e.g. standalone posts in /posts/) */}}
+        {{ range $section.RegularPages.ByDate.Reverse }}
+        <li>
+          <a href="{{ .RelPermalink }}" class="nav-link{{ if eq $currentPage . }} nav-link--active{{ end }}">
+            {{ .Title }}
+          </a>
+        </li>
+        {{ end }}
+
+      </ul>
+    </li>
+    {{ end }}
+
+    <li><div class="nav-divider"></div></li>
+
+    <li>
+      <a href="{{ "/tags/" | relURL }}" class="nav-link{{ if eq .Section "tags" }} nav-link--active{{ end }}">
+        Tags
+      </a>
+    </li>
+
+  </ul>
+</nav>

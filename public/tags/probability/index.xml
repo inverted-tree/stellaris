@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Probability on Stellaris</title>
+    <link>http://localhost:1313/tags/probability/</link>
+    <description>Recent content in Probability on Stellaris</description>
+    <generator>Hugo</generator>
+    <language>en-US</language>
+    <lastBuildDate>Wed, 07 Feb 2024 00:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/probability/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Diffuse Materials and Monte Carlo Sampling</title>
+      <link>http://localhost:1313/projects/ray-tracer/03-diffuse-materials/</link>
+      <pubDate>Wed, 07 Feb 2024 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/projects/ray-tracer/03-diffuse-materials/</guid>
+      <description>&lt;p&gt;Diffuse surfaces scatter incoming light in all directions roughly equally. The physically correct model is Lambertian reflectance, where the probability of scattering in a given direction is proportional to the cosine of the angle with the surface normal.&lt;/p&gt;&#xA;&lt;h2 id=&#34;monte-carlo-integration&#34;&gt;Monte Carlo Integration&lt;/h2&gt;&#xA;&lt;p&gt;We cannot analytically integrate over all possible incoming light directions, so we use Monte Carlo sampling: pick a random direction, trace a ray in that direction, and average many samples. The expected value converges to the true integral as sample count increases.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

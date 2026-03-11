@@ -1,10 +1,41 @@
 {{ define "main" }}
-  <h1>{{ .Title }}</h1>
-  {{ .Content }}
-  {{ range .Pages }}
-    <section>
-      <h2><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></h2>
-      {{ .Summary }}
-    </section>
+<div>
+  <header class="section-header">
+    <h1 class="section-title">{{ .Title }}</h1>
+    {{ with .Description }}
+    <p class="section-description">{{ . }}</p>
+    {{ end }}
+    {{ with .Content }}
+    <div class="prose" style="margin-top:1rem">{{ . }}</div>
+    {{ end }}
+  </header>
+
+  {{/* Sub-sections: e.g. individual projects listed on the /projects/ page */}}
+  {{ if .Sections }}
+  <div class="subsection-list">
+    {{ range .Sections.ByWeight }}
+    <a href="{{ .RelPermalink }}" class="subsection-card">
+      <span class="subsection-card-title">{{ .Title }}</span>
+      {{ with .Description }}
+      <span class="subsection-card-desc">{{ . }}</span>
+      {{ end }}
+      <span class="subsection-card-meta">{{ len .RegularPages }} {{ if eq (len .RegularPages) 1 }}post{{ else }}posts{{ end }}</span>
+    </a>
+    {{ end }}
+  </div>
   {{ end }}
+
+  {{/* Direct pages: e.g. posts within a project, or standalone posts */}}
+  {{ if .RegularPages }}
+  <div class="post-card-list">
+    {{ range $i, $p := .RegularPages.ByDate }}
+    <a href="{{ $p.RelPermalink }}" class="post-card">
+      <span class="post-card-num">{{ printf "%02d" (add $i 1) }}</span>
+      <span class="post-card-title">{{ $p.Title }}</span>
+      <time class="post-card-date">{{ $p.Date.Format "Jan 2006" }}</time>
+    </a>
+    {{ end }}
+  </div>
+  {{ end }}
+</div>
 {{ end }}

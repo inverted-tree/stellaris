@@ -1,10 +1,25 @@
 {{ define "main" }}
-  <h1>{{ .Title }}</h1>
+<article>
+  <header class="post-header">
+    <h1 class="post-title">{{ .Title }}</h1>
+    <div class="post-meta">
+      <time datetime="{{ .Date | time.Format "2006-01-02T15:04:05-07:00" }}">
+        {{ .Date | time.Format ":date_long" }}
+      </time>
+      {{ with .Parent }}
+        {{ if and .IsSection (not .IsHome) }}
+        <span class="post-meta-sep">·</span>
+        <a href="{{ .RelPermalink }}" class="tag-pill">{{ .Title }}</a>
+        {{ end }}
+      {{ end }}
+      {{ partial "terms.html" (dict "taxonomy" "tags" "page" .) }}
+    </div>
+  </header>
 
-  {{ $dateMachine := .Date | time.Format "2006-01-02T15:04:05-07:00" }}
-  {{ $dateHuman := .Date | time.Format ":date_long" }}
-  <time datetime="{{ $dateMachine }}">{{ $dateHuman }}</time>
+  <div class="prose">
+    {{ .Content }}
+  </div>
 
-  {{ .Content }}
-  {{ partial "terms.html" (dict "taxonomy" "tags" "page" .) }}
+  {{ partial "project-posts.html" . }}
+</article>
 {{ end }}
