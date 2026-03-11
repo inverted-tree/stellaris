@@ -345,6 +345,7 @@ details.nav-subsection[open] > summary > .nav-arrow {
 
 .prose {
   max-width: var(--content-max);
+  margin-inline: auto;
 }
 
 /* ============================================================
@@ -575,8 +576,10 @@ details.nav-subsection[open] > summary > .nav-arrow {
    ============================================================ */
 .post-header {
   margin-bottom: 2.25rem;
+  margin-inline: auto;
   padding-bottom: 1.5rem;
   border-bottom: 1px solid var(--border);
+  max-width: var(--content-max);
 }
 
 .post-title {
@@ -635,6 +638,8 @@ details.nav-subsection[open] > summary > .nav-arrow {
    ============================================================ */
 .series-strip {
   margin-top: 3rem;
+  margin-inline: auto;
+  max-width: var(--content-max);
   padding: 1.125rem 1.375rem;
   background: var(--bg-surface);
   border: 1px solid var(--border);
@@ -781,6 +786,7 @@ details.nav-subsection[open] > summary > .nav-arrow {
    ============================================================ */
 .section-header {
   margin-bottom: 2rem;
+  margin-inline: auto;
   padding-bottom: 1.5rem;
   border-bottom: 1px solid var(--border);
   max-width: var(--content-max);
@@ -807,6 +813,7 @@ details.nav-subsection[open] > summary > .nav-arrow {
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 1rem;
   max-width: var(--content-max);
+  margin-inline: auto;
   margin-bottom: 2.5rem;
 }
 
@@ -857,6 +864,7 @@ details.nav-subsection[open] > summary > .nav-arrow {
   display: flex;
   flex-direction: column;
   max-width: var(--content-max);
+  margin-inline: auto;
 }
 
 .post-card {
@@ -1126,6 +1134,7 @@ details.nav-subsection[open] > summary > .nav-arrow {
   flex-wrap: wrap;
   gap: 0.625rem;
   max-width: var(--content-max);
+  margin-inline: auto;
   margin-top: 0.5rem;
 }
 
