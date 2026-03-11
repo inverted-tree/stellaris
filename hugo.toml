@@ -1,4 +1,4 @@
-baseURL = 'https://example.org/'
+baseURL = 'https://inverted-tree.github.io/stellaris/'
 languageCode = 'en-US'
 title = 'Stellaris'
 cleanDestinationDir = true
