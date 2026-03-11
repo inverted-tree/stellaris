@@ -1,12 +1,11 @@
-# Stellaris
-
-A minimal Hugo theme for technical writing. Dark, opinionated, and easy to configure.
+<div align="center">
+    <h1>stellaris.</h1>
+    <p>A minimal Hugo theme for technical writing.</p>
+</div>
 
 Stellaris is built around two content types: standalone posts and multi-part project series. It includes a bento-grid home page, a scrolling projects ticker, KaTeX math rendering, syntax highlighting, and a contextual sidebar navigation that reflects the current page's location in the content hierarchy.
 
 **Requirements:** Hugo 0.146.0 or later (standard build, extended not required).
-
----
 
 ## Getting Started
 
@@ -14,8 +13,6 @@ Stellaris is built around two content types: standalone posts and multi-part pro
 2. Set your `baseURL` and `title` in `hugo.toml`.
 3. Create content in `content/posts/` and `content/projects/`.
 4. Run `hugo server` to preview locally.
-
----
 
 ## Content Structure
 
@@ -39,14 +36,14 @@ content/
 Posts in `content/posts/` appear in the posts feed and on the home page. They are independent — no series strip is shown.
 
 ```toml
-+++
+---
 title = 'My Post'
 date = '2025-01-15'
 draft = false
 description = 'A short summary shown in post lists.'
 tags = ['rust', 'graphics']
 math = false
-+++
+---
 ```
 
 Set `math = true` to enable KaTeX rendering on that page.
@@ -57,23 +54,23 @@ A project is a subdirectory under `content/projects/`. Each project has an `_ind
 
 **Project index (`_index.md`):**
 ```toml
-+++
+---
 title = 'Ray Tracer'
 description = 'Building a ray tracer from scratch in Rust.'
 weight = 10
 draft = false
-+++
+---
 ```
 
 **Project post:**
 ```toml
-+++
+---
 title = 'Sphere Intersection'
 date = '2025-02-01'
 draft = false
 description = 'Implementing the ray–sphere intersection test.'
 tags = ['rust', 'math']
-+++
+---
 ```
 
 Posts within a project automatically display a series strip at the bottom of each page, listing all other posts in the project with their dates. The strip only appears when the project contains more than one post.
@@ -93,8 +90,6 @@ content/posts/
 
 Reference the image in your markdown as `![Alt text](photo.jpg)`.
 
----
-
 ## Math Rendering
 
 Stellaris bundles KaTeX for self-hosted math rendering. Enable it per-page with `math = true` in the front matter.
@@ -107,8 +102,6 @@ Supported delimiters:
 | Block | `$$...$$` or `\[...\]` |
 
 The math partial loads KaTeX only on pages where it is needed.
-
----
 
 ## Shortcodes
 
@@ -130,8 +123,6 @@ fn main() {
 | `file` | No | Filename displayed above the block |
 
 When `lang` is omitted, Hugo attempts to detect the language automatically.
-
----
 
 ## Configuration
 
@@ -226,8 +217,6 @@ accentColor = '#7ec8a4'   # muted green
   ordered    = false
 ```
 
----
-
 ## Home Page Layout
 
 The home page consists of a hero section followed by a three-row bento grid.
@@ -239,8 +228,6 @@ The home page consists of a hero section followed by a three-row bento grid.
 **Row 2:** A full-width recent posts list showing the four most recent posts after the latest post card. Each entry shows the title, date, and description.
 
 **Row 3:** An auto-scrolling ticker showing all projects. The ticker loops seamlessly and slows as the number of projects grows.
-
----
 
 ## Syntax Highlighting
 
@@ -257,15 +244,11 @@ Syntax colors are defined in `assets/css/main.css` using Hugo's Chroma class nam
 
 To use a different Chroma theme, replace the `.chroma` rules in `main.css` or generate a new stylesheet with `hugo gen chromastyles --style=monokai > chroma.css` and merge it in.
 
----
-
 ## Asset Pipeline
 
 In development (`hugo server`), CSS and JS are served without processing. In production (`hugo`), both are minified, fingerprinted, and served with `integrity` attributes for subresource integrity.
 
 KaTeX is fully self-hosted under `static/katex/` and does not load anything from a CDN.
-
----
 
 ## Customizing Styles
 
