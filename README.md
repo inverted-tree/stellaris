@@ -1,46 +1,39 @@
 <div align="center">
     <h1>stellaris.</h1>
-    <p>A minimal Hugo theme for technical writing.</p>
+    <p>A minimal Hugo theme for technical writing — dark, opinionated, and easy to configure.</p>
 </div>
-
-Stellaris is built around two content types: standalone posts and multi-part project series. It includes a bento-grid home page, a scrolling projects ticker, KaTeX math rendering, syntax highlighting, and a contextual sidebar navigation that reflects the current page's location in the content hierarchy.
 
 ![Home page](docs/preview-home.png)
 ![Post page](docs/preview-post.png)
 
+Write in markdown. Ship something that looks good. Stellaris handles the rest — bento-grid home page, scrolling project ticker, sidebar navigation, KaTeX math, syntax highlighting, self-hosted fonts, the works.
+
 **Requirements:** Hugo 0.146.0 or later (standard build, extended not required).
 
-## Getting Started
+## Installation
 
-### As a Hugo module (recommended)
+### As a Hugo module
 
-1. Initialize your site as a Hugo module if it isn't one already:
-   ```sh
-   hugo mod init github.com/your-username/your-site
-   ```
-
-2. Add Stellaris as a module import in your `hugo.toml`:
-   ```toml
-   [module]
-     [[module.imports]]
-       path = "github.com/inverted-tree/stellaris"
-   ```
-
-3. Fetch the theme:
-   ```sh
-   hugo mod get github.com/inverted-tree/stellaris
-   ```
-
-4. Set your `baseURL` and `title` in `hugo.toml`, create content, and run `hugo server`.
-
-To update the theme to the latest version:
 ```sh
-hugo mod get -u github.com/inverted-tree/stellaris
+hugo mod init github.com/your-username/your-site
 ```
+
+Add to `hugo.toml`:
+```toml
+[module]
+  [[module.imports]]
+    path = "github.com/inverted-tree/stellaris"
+```
+
+```sh
+hugo mod get github.com/inverted-tree/stellaris
+hugo server
+```
+
+To update: `hugo mod get -u github.com/inverted-tree/stellaris`
 
 ### As a local copy
 
-Clone the repository into your site's `themes/` directory and reference it in `hugo.toml`:
 ```sh
 git clone https://github.com/inverted-tree/stellaris themes/stellaris
 ```
@@ -48,187 +41,66 @@ git clone https://github.com/inverted-tree/stellaris themes/stellaris
 theme = 'stellaris'
 ```
 
-## Content Structure
+## Content
 
-Stellaris organizes content into two sections:
+Two content types, kept separate:
 
 ```
 content/
-  posts/
-    _index.md          # Section index (title, description)
-    my-post.md         # Standalone post
+  posts/           # standalone posts
   projects/
-    _index.md          # Section index
     my-project/
-      _index.md        # Project index (title, description, weight)
-      01-intro.md      # First post in the series
-      02-details.md    # Second post
+      _index.md    # project metadata
+      01-intro.md  # series posts
+      02-part2.md
 ```
 
-### Standalone Posts
+**Standalone posts** show up in the feed and on the home page. No fuss.
 
-Posts in `content/posts/` appear in the posts feed and on the home page. They are independent — no series strip is shown.
+**Project series** group related posts under a project. Each post gets a series strip at the bottom linking to the others — but only if the project has more than one post.
+
+Use `weight` on a project's `_index.md` to control the order they appear in navigation and on the home page.
+
+### Front matter
 
 ```toml
----
 title = 'My Post'
 date = '2025-01-15'
-draft = false
-description = 'A short summary shown in post lists.'
+description = 'Shown in post lists and the home page.'
 tags = ['rust', 'graphics']
-math = false
----
+math = false   # set true to enable KaTeX on this page
 ```
 
-Set `math = true` to enable KaTeX rendering on that page.
+### Images and other assets
 
-### Project Series
-
-A project is a subdirectory under `content/projects/`. Each project has an `_index.md` that defines the project metadata, and any number of post files that form the series.
-
-**Project index (`_index.md`):**
-```toml
----
-title = 'Ray Tracer'
-description = 'Building a ray tracer from scratch in Rust.'
-weight = 10
-draft = false
----
-```
-
-**Project post:**
-```toml
----
-title = 'Sphere Intersection'
-date = '2025-02-01'
-draft = false
-description = 'Implementing the ray–sphere intersection test.'
-tags = ['rust', 'math']
----
-```
-
-Posts within a project automatically display a series strip at the bottom of each page, listing all other posts in the project with their dates. The strip only appears when the project contains more than one post.
-
-Use `weight` on the project `_index.md` to control the order projects appear in navigation and on the home page.
-
-### Posts with Assets
-
-To include images or other files alongside a post, use a leaf bundle:
+Use a leaf bundle to keep assets next to a post:
 
 ```
-content/posts/
-  my-post/
-    index.md
-    photo.jpg
+content/posts/my-post/
+  index.md
+  diagram.png
 ```
 
-Reference the image in your markdown as `![Alt text](photo.jpg)`.
-
-## Math Rendering
-
-Stellaris bundles KaTeX for self-hosted math rendering. Enable it per-page with `math = true` in the front matter.
-
-Supported delimiters:
-
-| Style | Delimiter |
-|---|---|
-| Inline | `$...$` or `\(...\)` |
-| Block | `$$...$$` or `\[...\]` |
-
-The math partial loads KaTeX only on pages where it is needed.
-
-## Shortcodes
-
-### `code`
-
-Renders a syntax-highlighted code block with an optional filename label.
-
-```
-{{</* code file="src/main.rs" lang="rust" */>}}
-fn main() {
-    println!("Hello, world!");
-}
-{{</* /code */>}}
-```
-
-| Parameter | Required | Description |
-|---|---|---|
-| `lang` | No | Language for syntax highlighting |
-| `file` | No | Filename displayed above the block |
-
-When `lang` is omitted, Hugo attempts to detect the language automatically.
+Then reference as `![Alt](diagram.png)`.
 
 ## Configuration
 
-All configuration lives in `hugo.toml`. The full set of available parameters is listed below.
-
-### Site
-
 ```toml
 baseURL = 'https://example.org/'
-languageCode = 'en-US'
-title = 'My Site'
-```
+title   = 'My Site'
 
-### Theme Parameters
-
-```toml
 [params]
-  # Displayed below the site title on the home page hero.
-  description = 'A site about things I build.'
-
-  # The animated text in the hero typewriter. Omit to show "Built for<br>[heroPrefix]".
-  heroTitle = 'your next Hugo site.'
-
-  # Primary accent color. Accepts any CSS color value.
-  accentColor = '#6b9cf8'
-
-  # Slug of the project to pin in the featured card on the home page.
-  featuredProject = 'my-project'
+  description    = 'A site about things I build.'
+  heroTitle      = 'your next Hugo site.'   # typewriter text on the home page
+  accentColor    = '#6b9cf8'                # any CSS color
+  featuredProject = 'my-project'            # slug of the project pinned on the home page
+  fontSans       = 'IBM Plex Sans'          # must match a @font-face family in fonts.css
+  fontMono       = 'IBM Plex Mono'
 ```
 
-### Labels and Text
+### Accent color
 
-Every user-visible string in the theme has a default and can be overridden.
-
-```toml
-[params]
-  # Navigation
-  homeLabel = 'Home'
-  tagsLabel = 'Tags'
-
-  # Hero buttons
-  heroPrefix         = 'Built for'        # Shown before heroTitle when heroTitle is unset
-  heroProjectsLabel  = 'Browse Projects'
-  heroPostsLabel     = 'Read Posts'
-
-  # Bento grid (home page cards)
-  homeFeaturedLabel    = 'Featured Project'
-  homeLatestPostLabel  = 'Latest Post'
-  homeRecentPostsLabel = 'Recent Posts'
-  homeProjectLabel     = 'Project'
-  homeViewAllLabel     = 'View all →'
-  homeNoPostsText      = 'No posts yet.'
-
-  # Series strip at the bottom of project posts
-  seriesLabel = 'Part of'
-
-  # Footer
-  footerText     = 'My Site'
-  footerLinkText = 'Built with Hugo'
-  footerLinkURL  = 'https://gohugo.io'
-
-  # 404 page
-  notFoundTitle    = 'Page not found'
-  notFoundMessage  = "The page you're looking for doesn't exist or has been moved."
-  notFoundLinkText = 'Go home'
-```
-
-Navigation labels for the Projects and Posts sections are read from the section `_index.md` `title` field, so renaming a section in its front matter is enough — no extra param needed.
-
-### Accent Color
-
-`accentColor` accepts any CSS color string. The theme derives hover, dim, and background tints from this value using `color-mix()`, so a single value controls the entire accent palette.
+One value, full palette. The theme derives all hover and tint variants automatically via `color-mix()`.
 
 ```toml
 accentColor = '#f4845f'   # warm orange
@@ -236,98 +108,71 @@ accentColor = '#6b9cf8'   # deep-space blue (default)
 accentColor = '#7ec8a4'   # muted green
 ```
 
-### Markup
+### Labels and text
 
-```toml
-[markup.highlight]
-  noClasses  = false      # Uses CSS classes for syntax colors; do not change
-  codeFences = true
-  lineNos    = false      # Set to true to show line numbers in code blocks
-  tabWidth   = 2
-
-[markup.tableOfContents]
-  startLevel = 2          # H2 and below appear in the TOC
-  endLevel   = 4
-  ordered    = false
-```
-
-## Home Page Layout
-
-The home page consists of a hero section followed by a three-row bento grid.
-
-**Hero:** Displays the site title, an animated typewriter text (`heroTitle`), the site description, and two call-to-action buttons.
-
-**Row 1:** A wide featured project card (set via `featuredProject`) and a narrow latest-post card side by side.
-
-**Row 2:** A full-width recent posts list showing the four most recent posts after the latest post card. Each entry shows the title, date, and description.
-
-**Row 3:** An auto-scrolling ticker showing all projects. The ticker loops seamlessly and slows as the number of projects grows.
-
-## Syntax Highlighting
-
-Syntax colors are defined in `assets/css/main.css` using Hugo's Chroma class names. The palette is Catppuccin-inspired:
-
-| Element | Color |
-|---|---|
-| Keywords | `#cba6f7` |
-| Strings | `#a6e3a1` |
-| Comments | `#4d6478` |
-| Numbers | `#fab387` |
-| Functions | `#89b4fa` |
-| Types | `#f9e2af` |
-
-To use a different Chroma theme, replace the `.chroma` rules in `main.css` or generate a new stylesheet with `hugo gen chromastyles --style=monokai > chroma.css` and merge it in.
-
-## Asset Pipeline
-
-In development (`hugo server`), CSS and JS are served without processing. In production (`hugo`), both are minified, fingerprinted, and served with `integrity` attributes for subresource integrity.
-
-KaTeX is fully self-hosted under `static/katex/` and does not load anything from a CDN.
-
-## Customizing Styles
-
-All design tokens are CSS custom properties in the `:root` block at the top of `assets/css/main.css`:
-
-```css
---bg:           #111111;
---bg-sidebar:   #0c0c0c;
---bg-surface:   #181818;
---border:       #272727;
---text:         #c8c8c8;
---text-muted:   #707070;
---heading:      #e8e8e8;
-
---r-sm:   3px;
---r-md:   6px;
---r-lg:   10px;
---r-pill: 999px;
-```
-
-The `--accent`, `--font-sans`, and `--font-mono` variables are injected at runtime from `hugo.toml` params and should not be set in `main.css` directly.
-
-## Fonts
-
-Stellaris ships with IBM Plex Sans and IBM Plex Mono, self-hosted under `static/fonts/`. The active font families are set in `hugo.toml`:
+Every user-facing string has a sensible default and can be overridden:
 
 ```toml
 [params]
-  fontSans = 'IBM Plex Sans'
-  fontMono = 'IBM Plex Mono'
+  homeLabel        = 'Home'
+  tagsLabel        = 'Tags'
+  heroPrefix       = 'Built for'
+  heroProjectsLabel  = 'Browse Projects'
+  heroPostsLabel     = 'Read Posts'
+  homeFeaturedLabel  = 'Featured Project'
+  homeLatestPostLabel  = 'Latest Post'
+  homeRecentPostsLabel = 'Recent Posts'
+  homeViewAllLabel   = 'View all →'
+  homeNoPostsText    = 'No posts yet.'
+  seriesLabel        = 'Part of'
+  footerText         = 'My Site'
+  footerLinkText     = 'Built with Hugo'
+  footerLinkURL      = 'https://gohugo.io'
+  notFoundTitle      = 'Page not found'
+  notFoundMessage    = "The page you're looking for doesn't exist or has been moved."
+  notFoundLinkText   = 'Go home'
 ```
 
-Remove or comment out either param to fall back to system fonts.
+Section nav labels (Projects, Posts) are read from each section's `_index.md` title — rename the file, rename the nav entry.
 
-### Adding a new font family
+## Math
 
-1. Place the woff2 files in a subdirectory under `static/fonts/`, for example `static/fonts/my-font/`.
-2. Add `@font-face` declarations for each weight and style you need to `assets/css/fonts.css`:
-   ```css
-   @font-face {
-     font-family: 'My Font';
-     src: url('/fonts/my-font/MyFont-Regular.woff2') format('woff2');
-     font-weight: 400;
-     font-style: normal;
-     font-display: swap;
-   }
-   ```
-3. Set `fontSans` or `fontMono` in `hugo.toml` to the family name you declared.
+KaTeX is self-hosted and loaded only on pages with `math = true`. Supported delimiters: `$...$`, `\(...\)`, `$$...$$`, `\[...\]`.
+
+## Shortcodes
+
+### `code`
+
+A syntax-highlighted block with an optional filename label:
+
+```
+{{</* code file="src/main.rs" lang="rust" */>}}
+fn main() {}
+{{</* /code */>}}
+```
+
+`lang` and `file` are both optional. Language is auto-detected when omitted.
+
+## Fonts
+
+Ships with IBM Plex Sans, IBM Plex Mono, and IBM Plex Math, all self-hosted under `static/fonts/`. To swap in a different font:
+
+1. Drop the woff2 files in `static/fonts/my-font/`
+2. Add `@font-face` rules to `assets/css/fonts.css`
+3. Set `fontSans` or `fontMono` in `hugo.toml`
+
+Comment out either param to fall back to system fonts.
+
+## Customizing styles
+
+Design tokens live in `assets/css/main.css`:
+
+```css
+--bg: #111111;  --bg-sidebar: #0c0c0c;  --bg-surface: #181818;
+--text: #c8c8c8;  --text-muted: #707070;  --heading: #e8e8e8;
+--border: #272727;
+```
+
+`--accent`, `--font-sans`, and `--font-mono` are injected from `hugo.toml` — don't set them in CSS directly.
+
+Syntax highlighting uses a Catppuccin-inspired palette. To swap it out: `hugo gen chromastyles --style=monokai` and replace the `.chroma` rules in `main.css`.
