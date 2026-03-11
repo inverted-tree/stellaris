@@ -1271,6 +1271,8 @@ details.nav-subsection[open] > summary > .nav-arrow {
    ============================================================ */
 .site-footer {
   grid-column: 1 / -1;
+  position: relative;
+  z-index: 1;
   background-color: var(--bg-sidebar);
   border-top: 1px solid var(--border);
   padding: 1.25rem 3rem;
