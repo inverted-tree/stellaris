@@ -881,12 +881,12 @@ details.nav-subsection[open] > summary > .nav-arrow {
   align-items: baseline;
   gap: 1rem;
   padding: 0.875rem 0;
-  border-bottom: 1px solid var(--border);
+  border-top: 1px solid var(--border);
   text-decoration: none;
 }
 
 .post-card:first-child {
-  border-top: 1px solid var(--border);
+  border-top: none;
 }
 
 .post-card-num {
@@ -1161,12 +1161,12 @@ details.nav-subsection[open] > summary > .nav-arrow {
   align-items: baseline;
   gap: 1rem;
   padding: 0.75rem 0;
-  border-bottom: 1px solid var(--border);
+  border-top: 1px solid var(--border);
   text-decoration: none;
 }
 
 .recent-post-item:first-child {
-  border-top: 1px solid var(--border);
+  border-top: none;
 }
 
 .recent-post-title {
