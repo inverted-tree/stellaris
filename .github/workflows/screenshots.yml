@@ -1,0 +1,61 @@
+name: Update Screenshots
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - 'README.md'
+      - 'LICENSE'
+      - 'CLAUDE.md'
+      - 'docs/**'
+
+permissions:
+  contents: write
+
+jobs:
+  screenshots:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: '0.157.0'
+          extended: false
+
+      - name: Install Hugo modules
+        run: hugo mod get
+
+      - name: Build
+        run: hugo --baseURL "http://localhost:8000/"
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install Playwright
+        run: |
+          pip install playwright
+          playwright install chromium --with-deps
+
+      - name: Start server
+        run: python -m http.server 8000 --directory public &
+
+      - name: Take screenshots
+        run: python .github/scripts/screenshot.py
+
+      - name: Commit screenshots
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs/preview-home.png docs/preview-post.png
+          git diff --staged --quiet || (git commit -m "Update screenshots" && git push)
