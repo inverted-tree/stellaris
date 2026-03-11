@@ -718,6 +718,14 @@ details.nav-subsection[open] > summary > .nav-arrow {
   color: var(--accent);
 }
 
+.series-post-date {
+  font-family: var(--font-mono);
+  font-size: 0.675rem;
+  color: var(--text-faint);
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
 /* ============================================================
    TOC Column
    ============================================================ */

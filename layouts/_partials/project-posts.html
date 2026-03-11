@@ -11,6 +11,7 @@
       <a href="{{ $p.RelPermalink }}" class="series-post-link{{ if eq $p $page }} series-post-link--current{{ end }}">
         <span class="series-post-num">{{ printf "%02d" (add $i 1) }}</span>
         <span class="series-post-name">{{ $p.Title }}</span>
+        <span class="series-post-date">{{ $p.Date.Format "Jan 2, 2006" }}</span>
       </a>
       {{ end }}
     </div>
