@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="{{ site.Language.LanguageCode }}" dir="{{ or site.Language.LanguageDirection `ltr` }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>404 | {{ site.Title }}</title>
+  <meta name="color-scheme" content="dark">
+  {{ partial "head/css.html" . }}
+</head>
+<body>
+
+<div class="site-layout">
+
+  <header class="topbar">
+    {{ partial "header.html" . }}
+  </header>
+
+  <main class="main-content main-content--home">
+    <div class="not-found">
+      <span class="not-found-code">404</span>
+      <h1 class="not-found-title">Page not found</h1>
+      <p class="not-found-body">The page you're looking for doesn't exist or has been moved.</p>
+      <a href="{{ "/" | relURL }}" class="not-found-link">Go home</a>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    {{ partial "footer.html" . }}
+  </footer>
+
+</div>
+
+</body>
+</html>
