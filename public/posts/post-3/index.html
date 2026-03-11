@@ -3,13 +3,25 @@
 <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Post 3 | Stellaris</title>
-<meta name="description" content="Writing about things I build and explore.">
+<title>Choosing a PRNG for Simulations | Stellaris</title>
+<meta name="description" content="Why the default random number generator is often wrong for simulations, and how to pick a better one.">
 
 <meta name="color-scheme" content="dark">
 
     <link rel="stylesheet" href="/css/main.css">
 
+<link rel="stylesheet" href="/katex/katex.min.css">
+<script defer src="/katex/katex.min.js"></script>
+<script defer src="/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '\\[', right: '\\]', display: true},
+      {left: '$',  right: '$',  display: false},
+      {left: '\\(', right: '\\)', display: false}
+    ],
+    throwOnError: false
+  })"></script>
 
 
       <script src="/js/main.js"></script>
@@ -156,19 +168,19 @@
         
         <li>
           <a href="/posts/post-3/" class="nav-link nav-link--active">
-            Post 3
+            Choosing a PRNG for Simulations
           </a>
         </li>
         
         <li>
           <a href="/posts/post-2/" class="nav-link">
-            Post 2
+            Ergonomic Error Handling in Rust
           </a>
         </li>
         
         <li>
           <a href="/posts/post-1/" class="nav-link">
-            Post 1
+            Floating-Point Pitfalls in Graphics Code
           </a>
         </li>
         
@@ -193,10 +205,10 @@
       
 <article>
   <header class="post-header">
-    <h1 class="post-title">Post 3</h1>
+    <h1 class="post-title">Choosing a PRNG for Simulations</h1>
     <div class="post-meta">
-      <time datetime="2023-03-15T11:00:00-07:00">
-        March 15, 2023
+      <time datetime="2024-03-15T00:00:00&#43;00:00">
+        March 15, 2024
       </time>
       
         
@@ -205,17 +217,64 @@
         
       
       
-<a href="/tags/red/" class="tag-pill">Red</a>
-<a href="/tags/green/" class="tag-pill">Green</a>
-<a href="/tags/blue/" class="tag-pill">Blue</a>
+<a href="/tags/rust/" class="tag-pill">Rust</a>
+<a href="/tags/math/" class="tag-pill">Math</a>
+<a href="/tags/probability/" class="tag-pill">Probability</a>
 
     </div>
   </header>
 
   <div class="prose">
-    <p>Occaecat aliqua consequat laborum ut ex aute aliqua culpa quis irure esse magna dolore quis. Proident fugiat labore eu laboris officia Lorem enim. Ipsum occaecat cillum ut tempor id sint aliqua incididunt nisi incididunt reprehenderit. Voluptate ad minim sint est aute aliquip esse occaecat tempor officia qui sunt. Aute ex ipsum id ut in est velit est laborum incididunt. Aliqua qui id do esse sunt eiusmod id deserunt eu nostrud aute sit ipsum. Deserunt esse cillum Lorem non magna adipisicing mollit amet consequat.</p>
-<p><img src="bryce-canyon.jpg" alt="Bryce Canyon National Park"></p>
-<p>Sit excepteur do velit veniam mollit in nostrud laboris incididunt ea. Amet eu cillum ut reprehenderit culpa aliquip labore laborum amet sit sit duis. Laborum id proident nostrud dolore laborum reprehenderit quis mollit nulla amet veniam officia id id. Aliquip in deserunt qui magna duis qui pariatur officia sunt deserunt.</p>
+    <p>Monte Carlo algorithms live and die by their random number generators. A path tracer might draw billions of samples per frame; a physics simulation might run for millions of steps. Using a low-quality PRNG introduces correlations that cause systematic error in the output — error that looks like noise and is very hard to debug.</p>
+<h2 id="what-makes-a-prng-bad">What Makes a PRNG Bad</h2>
+<p>The oldest generators — linear congruential generators (LCGs) — compute each value as:</p>
+$$x_{n+1} = (ax_n + c) \bmod m$$<p>They are fast and tiny, but the low bits repeat with very short periods and successive values fall on a small number of hyperplanes in high-dimensional space. For 3D Monte Carlo sampling this is directly harmful: sample points cluster along planes instead of filling the domain uniformly.</p>
+<p>The Mersenne Twister (MT19937) is far better and was the default in many languages for decades. It has a period of $2^{19937}-1$ and passes most statistical tests. But it has a 2.5 KB state, poor cache behavior, and is not particularly fast on modern hardware. For most simulations today it is not the best choice.</p>
+<h2 id="better-alternatives">Better Alternatives</h2>
+<p><strong>xoshiro256++</strong> and <strong>xoshiro256**</strong> are the current go-to generators for simulations that need both speed and quality. They have 256 bits of state, pass all known statistical tests, and produce 64-bit output in about 4 clock cycles:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="k">use</span><span class="w"> </span><span class="n">rand</span>::<span class="n">SeedableRng</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">use</span><span class="w"> </span><span class="n">rand_xoshiro</span>::<span class="n">Xoshiro256PlusPlus</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">rng</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Xoshiro256PlusPlus</span>::<span class="n">seed_from_u64</span><span class="p">(</span><span class="mi">12345</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="kd">let</span><span class="w"> </span><span class="n">sample</span>: <span class="kt">f64</span> <span class="o">=</span><span class="w"> </span><span class="n">rng</span><span class="p">.</span><span class="n">gen</span><span class="p">();</span><span class="w">
+</span></span></span></code></pre></div><p><strong>PCG64</strong> is another strong choice. It is slightly slower than xoshiro but has a proven analysis and supports efficient jump-ahead (advancing the state by $n$ steps in $O(\log n)$ time), which is useful for parallel simulations where each thread needs an independent, non-overlapping stream.</p>
+<h2 id="seeding">Seeding</h2>
+<p>Bad seeding ruins a good PRNG. Common mistakes:</p>
+<ul>
+<li>Seeding with the current time in seconds — two runs started in the same second produce identical output.</li>
+<li>Seeding with a small integer directly — most PRNG algorithms map similar seeds to similar initial states, causing the first few outputs to be correlated across runs.</li>
+</ul>
+<p>The correct approach is to seed with 256 bits of OS entropy, which <code>rand</code> handles automatically:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="c1">// Good: seeds from OS entropy
+</span></span></span><span class="line"><span class="cl"><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">rng</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Xoshiro256PlusPlus</span>::<span class="n">from_entropy</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// Acceptable for reproducible runs: hash the seed first
+</span></span></span><span class="line"><span class="cl"><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">rng</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Xoshiro256PlusPlus</span>::<span class="n">seed_from_u64</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">std</span>::<span class="n">hash</span>::<span class="n">BuildHasher</span>::<span class="n">hash_one</span><span class="p">(</span><span class="o">&amp;</span><span class="n">std</span>::<span class="n">collections</span>::<span class="n">hash_map</span>::<span class="n">RandomState</span>::<span class="n">new</span><span class="p">(),</span><span class="w"> </span><span class="n">seed</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">);</span><span class="w">
+</span></span></span></code></pre></div><h2 id="parallel-sampling">Parallel Sampling</h2>
+<p>Running multiple rendering threads each using the same seed produces correlated samples. Two patterns avoid this:</p>
+<p><strong>Jump-ahead</strong>: initialize one RNG, then jump it ahead by a fixed stride per thread. PCG64 supports this natively; for xoshiro, use the provided <code>jump()</code> method which advances the state by $2^{128}$ steps:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">rngs</span>: <span class="nb">Vec</span><span class="o">&lt;</span><span class="n">_</span><span class="o">&gt;</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="o">..</span><span class="n">num_threads</span><span class="p">).</span><span class="n">map</span><span class="p">(</span><span class="o">|</span><span class="n">_</span><span class="o">|</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">r</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">rng</span><span class="p">.</span><span class="n">clone</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">rng</span><span class="p">.</span><span class="n">jump</span><span class="p">();</span><span class="w"> </span><span class="c1">// advance base by 2^128 steps
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">r</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}).</span><span class="n">collect</span><span class="p">();</span><span class="w">
+</span></span></span></code></pre></div><p><strong>Per-pixel seeding</strong>: hash the pixel coordinates and sample index into a seed. This makes each pixel&rsquo;s samples independent regardless of thread assignment:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="k">fn</span> <span class="nf">pixel_rng</span><span class="p">(</span><span class="n">x</span>: <span class="kt">u32</span><span class="p">,</span><span class="w"> </span><span class="n">y</span>: <span class="kt">u32</span><span class="p">,</span><span class="w"> </span><span class="n">sample</span>: <span class="kt">u32</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nc">Xoshiro256PlusPlus</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">seed</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u64</span><span class="p">)</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="p">((</span><span class="n">y</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u64</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">16</span><span class="p">)</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="p">((</span><span class="n">sample</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">u64</span><span class="p">)</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="mi">32</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Xoshiro256PlusPlus</span>::<span class="n">seed_from_u64</span><span class="p">(</span><span class="n">splitmix64</span><span class="p">(</span><span class="n">seed</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">fn</span> <span class="nf">splitmix64</span><span class="p">(</span><span class="k">mut</span><span class="w"> </span><span class="n">x</span>: <span class="kt">u64</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="kt">u64</span> <span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="p">.</span><span class="n">wrapping_add</span><span class="p">(</span><span class="mh">0x9e3779b97f4a7c15</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">30</span><span class="p">)).</span><span class="n">wrapping_mul</span><span class="p">(</span><span class="mh">0xbf58476d1ce4e5b9</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">27</span><span class="p">)).</span><span class="n">wrapping_mul</span><span class="p">(</span><span class="mh">0x94d049bb133111eb</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">x</span><span class="w"> </span><span class="o">^</span><span class="w"> </span><span class="p">(</span><span class="n">x</span><span class="w"> </span><span class="o">&gt;&gt;</span><span class="w"> </span><span class="mi">31</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p><code>splitmix64</code> is a finalizer that turns a structured input (sequential integers) into a high-quality seed, avoiding the correlated-seed problem.</p>
+<h2 id="summary">Summary</h2>
+<p>For most simulation work: use xoshiro256++ from <code>rand_xoshiro</code>, seed from OS entropy, and use jump-ahead or per-pixel hashing for parallel streams. The upgrade from <code>thread_rng</code> (which wraps OS entropy directly, with syscall overhead) or from Mersenne Twister is worth it both for speed and for the absence of subtle low-dimensional correlations.</p>
 
   </div>
 
@@ -230,17 +289,17 @@
       
       <a href="/posts/post-1/" class="series-post-link">
         <span class="series-post-num">01</span>
-        <span class="series-post-name">Post 1</span>
+        <span class="series-post-name">Floating-Point Pitfalls in Graphics Code</span>
       </a>
       
       <a href="/posts/post-2/" class="series-post-link">
         <span class="series-post-num">02</span>
-        <span class="series-post-name">Post 2</span>
+        <span class="series-post-name">Ergonomic Error Handling in Rust</span>
       </a>
       
       <a href="/posts/post-3/" class="series-post-link series-post-link--current">
         <span class="series-post-num">03</span>
-        <span class="series-post-name">Post 3</span>
+        <span class="series-post-name">Choosing a PRNG for Simulations</span>
       </a>
       
     </div>
@@ -255,7 +314,15 @@
       
 <p class="toc-heading">On this page</p>
 <nav class="toc-nav" aria-label="Table of contents">
-  <nav id="TableOfContents"></nav>
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#what-makes-a-prng-bad">What Makes a PRNG Bad</a></li>
+    <li><a href="#better-alternatives">Better Alternatives</a></li>
+    <li><a href="#seeding">Seeding</a></li>
+    <li><a href="#parallel-sampling">Parallel Sampling</a></li>
+    <li><a href="#summary">Summary</a></li>
+  </ul>
+</nav>
 </nav>
 
 

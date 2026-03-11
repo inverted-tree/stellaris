@@ -3,8 +3,8 @@
 <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Post 2 | Stellaris</title>
-<meta name="description" content="Writing about things I build and explore.">
+<title>Ergonomic Error Handling in Rust | Stellaris</title>
+<meta name="description" content="Practical patterns for expressing errors clearly: the ? operator, thiserror, anyhow, and when to use each.">
 
 <meta name="color-scheme" content="dark">
 
@@ -156,19 +156,19 @@
         
         <li>
           <a href="/posts/post-3/" class="nav-link">
-            Post 3
+            Choosing a PRNG for Simulations
           </a>
         </li>
         
         <li>
           <a href="/posts/post-2/" class="nav-link nav-link--active">
-            Post 2
+            Ergonomic Error Handling in Rust
           </a>
         </li>
         
         <li>
           <a href="/posts/post-1/" class="nav-link">
-            Post 1
+            Floating-Point Pitfalls in Graphics Code
           </a>
         </li>
         
@@ -193,10 +193,10 @@
       
 <article>
   <header class="post-header">
-    <h1 class="post-title">Post 2</h1>
+    <h1 class="post-title">Ergonomic Error Handling in Rust</h1>
     <div class="post-meta">
-      <time datetime="2023-02-15T10:00:00-07:00">
-        February 15, 2023
+      <time datetime="2024-02-20T00:00:00&#43;00:00">
+        February 20, 2024
       </time>
       
         
@@ -205,15 +205,63 @@
         
       
       
-<a href="/tags/red/" class="tag-pill">Red</a>
-<a href="/tags/green/" class="tag-pill">Green</a>
+<a href="/tags/rust/" class="tag-pill">Rust</a>
+<a href="/tags/design-patterns/" class="tag-pill">Design-Patterns</a>
 
     </div>
   </header>
 
   <div class="prose">
-    <p>Anim eiusmod irure incididunt sint cupidatat. Incididunt irure irure irure nisi ipsum do ut quis fugiat consectetur proident cupidatat incididunt cillum. Dolore voluptate occaecat qui mollit laborum ullamco et. Ipsum laboris officia anim laboris culpa eiusmod ex magna ex cupidatat anim ipsum aute. Mollit aliquip occaecat qui sunt velit ut cupidatat reprehenderit enim sunt laborum. Velit veniam in officia nulla adipisicing ut duis officia.</p>
-<p>Exercitation voluptate irure in irure tempor mollit Lorem nostrud ad officia. Velit id fugiat occaecat do tempor. Sit officia Lorem aliquip eu deserunt consectetur. Aute proident deserunt in nulla aliquip dolore ipsum Lorem ut cupidatat consectetur sit sint laborum. Esse cupidatat sit sint sunt tempor exercitation deserunt. Labore dolor duis laborum est do nisi ut veniam dolor et nostrud nostrud.</p>
+    <p>Rust forces you to handle errors explicitly, which is good. It does not force you to write mountains of boilerplate, which is even better — once you know the right tools. The ecosystem has converged on a small set of patterns that cover almost every case cleanly.</p>
+<h2 id="the--operator">The ? Operator</h2>
+<p><code>?</code> is syntactic sugar for &ldquo;if this is an error, convert it and return early&rdquo;. It replaces the most common match pattern:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="c1">// Before
+</span></span></span><span class="line"><span class="cl"><span class="kd">let</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">match</span><span class="w"> </span><span class="n">File</span>::<span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nb">Ok</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="w">  </span><span class="o">=&gt;</span><span class="w"> </span><span class="n">f</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nb">Err</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="nb">Err</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">into</span><span class="p">()),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">};</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="c1">// After
+</span></span></span><span class="line"><span class="cl"><span class="kd">let</span><span class="w"> </span><span class="n">file</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">File</span>::<span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">?</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></div><p>The <code>.into()</code> call is the key detail: <code>?</code> runs <code>From::from</code> on the error, which means your function&rsquo;s return type must implement <code>From&lt;E&gt;</code> for every error type <code>E</code> that appears behind a <code>?</code>. This is what drives the design of your error types.</p>
+<h2 id="library-code-thiserror">Library Code: thiserror</h2>
+<p>For libraries, error types must be explicit. Callers depend on matching specific variants; an opaque error type forces them to stringify and parse, which is terrible. <code>thiserror</code> derives the <code>Error</code> trait with minimal boilerplate:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="k">use</span><span class="w"> </span><span class="n">thiserror</span>::<span class="n">Error</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#[derive(Debug, Error)]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">pub</span><span class="w"> </span><span class="k">enum</span> <span class="nc">SceneError</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="cp">#[error(</span><span class="s">&#34;mesh file not found: {path}&#34;</span><span class="cp">)]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">MeshNotFound</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">path</span>: <span class="nc">PathBuf</span><span class="w"> </span><span class="p">},</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="cp">#[error(</span><span class="s">&#34;unsupported material type: {0}&#34;</span><span class="cp">)]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">UnsupportedMaterial</span><span class="p">(</span><span class="nb">String</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="cp">#[error(</span><span class="s">&#34;failed to read scene file&#34;</span><span class="cp">)]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Io</span><span class="p">(</span><span class="cp">#[from]</span><span class="w"> </span><span class="n">std</span>::<span class="n">io</span>::<span class="n">Error</span><span class="p">),</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p>The <code>#[from]</code> attribute generates a <code>From&lt;io::Error&gt;</code> impl automatically, so <code>?</code> on any <code>io::Error</code> inside a function returning <code>Result&lt;_, SceneError&gt;</code> just works. The <code>#[error(&quot;...&quot;)]</code> string becomes the <code>Display</code> impl — no manual <code>fmt</code> implementation needed.</p>
+<h2 id="application-code-anyhow">Application Code: anyhow</h2>
+<p>Applications care about propagating errors to the user, not about callers matching variants. <code>anyhow::Error</code> is a type-erased error that carries a backtrace and can wrap anything that implements <code>std::error::Error</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="k">use</span><span class="w"> </span><span class="n">anyhow</span>::<span class="p">{</span><span class="n">Context</span><span class="p">,</span><span class="w"> </span><span class="nb">Result</span><span class="p">};</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="k">fn</span> <span class="nf">load_scene</span><span class="p">(</span><span class="n">path</span>: <span class="kp">&amp;</span><span class="nc">Path</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nb">Result</span><span class="o">&lt;</span><span class="n">Scene</span><span class="o">&gt;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">text</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fs</span>::<span class="n">read_to_string</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">.</span><span class="n">with_context</span><span class="p">(</span><span class="o">||</span><span class="w"> </span><span class="fm">format!</span><span class="p">(</span><span class="s">&#34;could not read scene file: </span><span class="si">{}</span><span class="s">&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">path</span><span class="p">.</span><span class="n">display</span><span class="p">()))</span><span class="o">?</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">scene</span>: <span class="nc">Scene</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">toml</span>::<span class="n">from_str</span><span class="p">(</span><span class="o">&amp;</span><span class="n">text</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">.</span><span class="n">context</span><span class="p">(</span><span class="s">&#34;scene file is not valid TOML&#34;</span><span class="p">)</span><span class="o">?</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nb">Ok</span><span class="p">(</span><span class="n">scene</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p><code>.context()</code> and <code>.with_context()</code> attach a human-readable explanation to the error without losing the underlying cause. When the error reaches <code>main</code> and is printed, the full chain is visible:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Error: could not read scene file: scenes/cornell.toml
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Caused by:
+</span></span><span class="line"><span class="cl">    No such file or directory (os error 2)
+</span></span></code></pre></div><h2 id="choosing-between-them">Choosing Between Them</h2>
+<p>The rule of thumb: use <code>thiserror</code> for anything in a library crate, use <code>anyhow</code> in binary crates and integration code. They compose cleanly — a library function returns <code>Result&lt;T, MyError&gt;</code>, the application function calls it with <code>?</code>, and <code>anyhow</code> wraps <code>MyError</code> transparently since it implements <code>std::error::Error</code>.</p>
+<h2 id="avoiding-the-trap-of-string-errors">Avoiding the Trap of String Errors</h2>
+<p>A common shortcut is returning <code>Result&lt;T, String&gt;</code> or <code>Result&lt;T, Box&lt;dyn Error&gt;&gt;</code>. Both lose structured information: <code>String</code> prevents callers from handling specific cases programmatically, and <code>Box&lt;dyn Error&gt;</code> without <code>anyhow</code> loses the error chain. If you find yourself writing either, it is almost always worth spending two minutes defining a proper enum with <code>thiserror</code> instead.</p>
 
   </div>
 
@@ -228,17 +276,17 @@
       
       <a href="/posts/post-1/" class="series-post-link">
         <span class="series-post-num">01</span>
-        <span class="series-post-name">Post 1</span>
+        <span class="series-post-name">Floating-Point Pitfalls in Graphics Code</span>
       </a>
       
       <a href="/posts/post-2/" class="series-post-link series-post-link--current">
         <span class="series-post-num">02</span>
-        <span class="series-post-name">Post 2</span>
+        <span class="series-post-name">Ergonomic Error Handling in Rust</span>
       </a>
       
       <a href="/posts/post-3/" class="series-post-link">
         <span class="series-post-num">03</span>
-        <span class="series-post-name">Post 3</span>
+        <span class="series-post-name">Choosing a PRNG for Simulations</span>
       </a>
       
     </div>
@@ -253,7 +301,15 @@
       
 <p class="toc-heading">On this page</p>
 <nav class="toc-nav" aria-label="Table of contents">
-  <nav id="TableOfContents"></nav>
+  <nav id="TableOfContents">
+  <ul>
+    <li><a href="#the--operator">The ? Operator</a></li>
+    <li><a href="#library-code-thiserror">Library Code: thiserror</a></li>
+    <li><a href="#application-code-anyhow">Application Code: anyhow</a></li>
+    <li><a href="#choosing-between-them">Choosing Between Them</a></li>
+    <li><a href="#avoiding-the-trap-of-string-errors">Avoiding the Trap of String Errors</a></li>
+  </ul>
+</nav>
 </nav>
 
 
