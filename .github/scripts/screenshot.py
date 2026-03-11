@@ -12,10 +12,12 @@ async def main():
 
         await page.goto(f"{BASE}/")
         await page.wait_for_load_state("networkidle")
+        await asyncio.sleep(10)
         await page.screenshot(path="docs/preview-home.png")
 
         await page.goto(f"{BASE}/projects/ray-tracer/02-sphere-intersection/")
         await page.wait_for_load_state("networkidle")
+        await asyncio.sleep(10)
         await page.screenshot(path="docs/preview-post.png")
 
         await browser.close()
