@@ -9,10 +9,41 @@ Stellaris is built around two content types: standalone posts and multi-part pro
 
 ## Getting Started
 
-1. Copy the theme files into your Hugo site, or use this repository as a starting point.
-2. Set your `baseURL` and `title` in `hugo.toml`.
-3. Create content in `content/posts/` and `content/projects/`.
-4. Run `hugo server` to preview locally.
+### As a Hugo module (recommended)
+
+1. Initialize your site as a Hugo module if it isn't one already:
+   ```sh
+   hugo mod init github.com/your-username/your-site
+   ```
+
+2. Add Stellaris as a module import in your `hugo.toml`:
+   ```toml
+   [module]
+     [[module.imports]]
+       path = "github.com/inverted-tree/stellaris"
+   ```
+
+3. Fetch the theme:
+   ```sh
+   hugo mod get github.com/inverted-tree/stellaris
+   ```
+
+4. Set your `baseURL` and `title` in `hugo.toml`, create content, and run `hugo server`.
+
+To update the theme to the latest version:
+```sh
+hugo mod get -u github.com/inverted-tree/stellaris
+```
+
+### As a local copy
+
+Clone the repository into your site's `themes/` directory and reference it in `hugo.toml`:
+```sh
+git clone https://github.com/inverted-tree/stellaris themes/stellaris
+```
+```toml
+theme = 'stellaris'
+```
 
 ## Content Structure
 

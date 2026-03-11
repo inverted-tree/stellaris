@@ -1004,6 +1004,7 @@ details.nav-subsection[open] > summary > .nav-arrow {
   vertical-align: bottom;
   white-space: nowrap;
   font-family: var(--font-mono);
+  letter-spacing: 0;
   color: var(--accent);
   border-right: 2px solid var(--accent);
   width: 0;
