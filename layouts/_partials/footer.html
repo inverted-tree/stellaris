@@ -1,4 +1,6 @@
-<span>Stellaris — a Hugo theme</span>
+<span>{{ site.Params.footerText | default "Stellaris — a Hugo theme" }}</span>
 <div class="footer-links">
-  <a href="https://gohugo.io" class="footer-link">Built with Hugo</a>
+  {{ $linkText := site.Params.footerLinkText | default "Built with Hugo" }}
+  {{ $linkURL  := site.Params.footerLinkURL  | default "https://gohugo.io" }}
+  <a href="{{ $linkURL }}" class="footer-link">{{ $linkText }}</a>
 </div>

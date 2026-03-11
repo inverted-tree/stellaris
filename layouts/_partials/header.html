@@ -4,12 +4,12 @@
 
 <nav class="topbar-links" aria-label="Main navigation">
   {{ with site.GetPage "/projects" }}
-  <a href="{{ .RelPermalink }}" class="topbar-link">Projects</a>
+  <a href="{{ .RelPermalink }}" class="topbar-link">{{ .Title }}</a>
   {{ end }}
   {{ with site.GetPage "/posts" }}
-  <a href="{{ .RelPermalink }}" class="topbar-link">Posts</a>
+  <a href="{{ .RelPermalink }}" class="topbar-link">{{ .Title }}</a>
   {{ end }}
-  <a href="{{ "/tags/" | relURL }}" class="topbar-link">Tags</a>
+  <a href="{{ "/tags/" | relURL }}" class="topbar-link">{{ site.Params.tagsLabel | default "Tags" }}</a>
 </nav>
 
 <button class="sidebar-toggle-btn" aria-label="Toggle navigation" onclick="document.getElementById('sidebar-toggle').checked = !document.getElementById('sidebar-toggle').checked">

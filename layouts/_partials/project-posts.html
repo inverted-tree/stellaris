@@ -4,7 +4,7 @@
 {{ if and .Parent (not .Parent.IsHome) .Parent.IsSection .Parent.Parent (not .Parent.Parent.IsHome) }}
   {{ if gt (len .Parent.RegularPages) 1 }}
   <nav class="series-strip" aria-label="Other posts in this series">
-    <div class="series-strip-label">Part of</div>
+    <div class="series-strip-label">{{ site.Params.seriesLabel | default "Part of" }}</div>
     <a href="{{ .Parent.RelPermalink }}" class="series-strip-title">{{ .Parent.Title }}</a>
     <div class="series-posts-list">
       {{ range $i, $p := .Parent.RegularPages.ByDate }}

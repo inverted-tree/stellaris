@@ -5,8 +5,38 @@ title = 'Stellaris'
 [params]
   description = 'A minimal Hugo theme for technical writing — dark, opinionated, and easy to configure.'
   heroTitle = 'your next Hugo site.'
-  accentColor = '#6b9cf8'  # theme accent — change to any CSS color
+  accentColor = '#6b9cf8'       # theme accent — change to any CSS color
   featuredProject = 'ray-tracer'  # slug of the project to feature on the home page
+
+  # Navigation labels
+  homeLabel = 'Home'
+  tagsLabel = 'Tags'
+
+  # Hero / landing page
+  heroPrefix = 'Built for'
+  heroProjectsLabel = 'Browse Projects'
+  heroPostsLabel    = 'Read Posts'
+
+  # Bento grid labels
+  homeFeaturedLabel   = 'Featured Project'
+  homeLatestPostLabel = 'Latest Post'
+  homeRecentPostsLabel = 'Recent Posts'
+  homeProjectLabel    = 'Project'
+  homeViewAllLabel    = 'View all →'
+  homeNoPostsText     = 'No posts yet.'
+
+  # Series strip
+  seriesLabel = 'Part of'
+
+  # Footer
+  footerText     = 'Stellaris — a Hugo theme'
+  footerLinkText = 'Built with Hugo'
+  footerLinkURL  = 'https://gohugo.io'
+
+  # 404 page
+  notFoundTitle   = 'Page not found'
+  notFoundMessage = "The page you're looking for doesn't exist or has been moved."
+  notFoundLinkText = 'Go home'
 
 [taxonomies]
   tag = 'tags'

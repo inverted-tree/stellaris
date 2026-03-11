@@ -18,9 +18,9 @@
   <main class="main-content main-content--home">
     <div class="not-found">
       <span class="not-found-code">404</span>
-      <h1 class="not-found-title">Page not found</h1>
-      <p class="not-found-body">The page you're looking for doesn't exist or has been moved.</p>
-      <a href="{{ "/" | relURL }}" class="not-found-link">Go home</a>
+      <h1 class="not-found-title">{{ site.Params.notFoundTitle | default "Page not found" }}</h1>
+      <p class="not-found-body">{{ site.Params.notFoundMessage | default "The page you're looking for doesn't exist or has been moved." }}</p>
+      <a href="{{ "/" | relURL }}" class="not-found-link">{{ site.Params.notFoundLinkText | default "Go home" }}</a>
     </div>
   </main>
 

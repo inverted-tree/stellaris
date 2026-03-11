@@ -6,7 +6,7 @@
     {{/* Home link */}}
     <li>
       <a href="{{ "/" | relURL }}" class="nav-link{{ if .IsHome }} nav-link--active{{ end }}">
-        Home
+        {{ site.Params.homeLabel | default "Home" }}
       </a>
     </li>
 
@@ -65,7 +65,7 @@
 
     <li>
       <a href="{{ "/tags/" | relURL }}" class="nav-link{{ if eq .Section "tags" }} nav-link--active{{ end }}">
-        Tags
+        {{ site.Params.tagsLabel | default "Tags" }}
       </a>
     </li>
 
