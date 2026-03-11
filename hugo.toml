@@ -1,6 +1,7 @@
 baseURL = 'https://example.org/'
 languageCode = 'en-US'
 title = 'Stellaris'
+cleanDestinationDir = true
 
 [params]
   description = 'A minimal Hugo theme for technical writing — dark, opinionated, and easy to configure.'
