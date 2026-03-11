@@ -6,6 +6,10 @@
 {{ end }}
 <meta name="color-scheme" content="dark">
 {{ partial "head/css.html" . }}
-{{ with site.Params.accentColor }}<style>:root{--accent:{{ . }};}</style>{{ end }}
+<style>:root{
+{{- with site.Params.accentColor }}--accent:{{ . }};{{ end }}
+{{- with site.Params.fontSans }}--font-sans:'{{ . }}',system-ui,-apple-system,sans-serif;{{ end }}
+{{- with site.Params.fontMono }}--font-mono:'{{ . }}',ui-monospace,"SFMono-Regular",Consolas,monospace;{{ end }}
+}</style>
 {{ if .Param "math" }}{{ partialCached "math.html" . }}{{ end }}
 {{ partial "head/js.html" . }}

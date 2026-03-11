@@ -9,6 +9,11 @@ cleanDestinationDir = true
   accentColor = '#6b9cf8'       # theme accent — change to any CSS color
   featuredProject = 'ray-tracer'  # slug of the project to feature on the home page
 
+  # Fonts — must match a @font-face family name declared in assets/css/fonts.css
+  # Remove or comment out to fall back to system fonts
+  fontSans = 'IBM Plex Sans'
+  fontMono = 'IBM Plex Mono'
+
   # Navigation labels
   homeLabel = 'Home'
   tagsLabel = 'Tags'

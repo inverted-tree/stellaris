@@ -263,12 +263,37 @@ All design tokens are CSS custom properties in the `:root` block at the top of `
 --text-muted:   #707070;
 --heading:      #e8e8e8;
 
---font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
-
 --r-sm:   3px;
 --r-md:   6px;
 --r-lg:   10px;
 --r-pill: 999px;
 ```
 
-The `--accent` variable is injected at runtime from `params.accentColor` and should not be set in the CSS file directly.
+The `--accent`, `--font-sans`, and `--font-mono` variables are injected at runtime from `hugo.toml` params and should not be set in `main.css` directly.
+
+## Fonts
+
+Stellaris ships with IBM Plex Sans and IBM Plex Mono, self-hosted under `static/fonts/`. The active font families are set in `hugo.toml`:
+
+```toml
+[params]
+  fontSans = 'IBM Plex Sans'
+  fontMono = 'IBM Plex Mono'
+```
+
+Remove or comment out either param to fall back to system fonts.
+
+### Adding a new font family
+
+1. Place the woff2 files in a subdirectory under `static/fonts/`, for example `static/fonts/my-font/`.
+2. Add `@font-face` declarations for each weight and style you need to `assets/css/fonts.css`:
+   ```css
+   @font-face {
+     font-family: 'My Font';
+     src: url('/fonts/my-font/MyFont-Regular.woff2') format('woff2');
+     font-weight: 400;
+     font-style: normal;
+     font-display: swap;
+   }
+   ```
+3. Set `fontSans` or `fontMono` in `hugo.toml` to the family name you declared.
