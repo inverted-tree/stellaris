@@ -179,4 +179,4 @@ Syntax highlighting uses a Catppuccin-inspired palette. To swap it out: `hugo ge
 
 ---
 
-Inspired by [zed.dev/docs](https://zed.dev/docs). Built by [inverted-tree](https://github.com/inverted-tree) with Claude Sonnet 4.6.
+Inspired by [zed.dev/docs](https://zed.dev/docs). Built by [inverted-tree](https://github.com/inverted-tree) with the help of Claude Sonnet 4.6.
