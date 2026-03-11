@@ -25,7 +25,7 @@
 
 <div class="bento-grid">
 
-  {{/* Projects — configured or first-by-weight is featured (wide), rest are regular */}}
+  {{/* Row 1: featured project (2 cols) + latest post (1 col) */}}
   {{ with site.GetPage "/projects" }}
     {{ $sections := .Sections.ByWeight }}
     {{ $featured := index $sections 0 }}
@@ -47,24 +47,8 @@
       </div>
     </a>
     {{ end }}
-    {{ range $sections }}
-      {{ if ne . $featured }}
-      <a href="{{ .RelPermalink }}" class="bento-card bento-card--project">
-        <div class="bento-card-eyebrow">Project</div>
-        <h2 class="bento-card-title">{{ .Title }}</h2>
-        {{ with .Description }}
-        <p class="bento-card-desc">{{ . }}</p>
-        {{ end }}
-        <div class="bento-card-footer">
-          <span class="bento-card-count">{{ len .RegularPages }} posts</span>
-          <span class="bento-card-arrow">→</span>
-        </div>
-      </a>
-      {{ end }}
-    {{ end }}
   {{ end }}
 
-  {{/* Latest post — highlighted card */}}
   {{ with site.GetPage "/posts" }}
     {{ with (index (.RegularPages.ByDate.Reverse) 0) }}
     <a href="{{ .RelPermalink }}" class="bento-card bento-card--latest">
@@ -78,20 +62,62 @@
     {{ end }}
   {{ end }}
 
-  {{/* Recent posts list — skips the latest already shown above */}}
-  {{ with site.GetPage "/posts" }}
-    {{ $rest := after 1 .RegularPages.ByDate.Reverse }}
-    {{ if $rest }}
-    <div class="bento-card bento-card--posts">
-      <div class="bento-posts-header">
-        <span class="bento-card-eyebrow">Recent Posts</span>
-        <a href="{{ .RelPermalink }}" class="bento-posts-link">View all →</a>
-      </div>
-      <div class="bento-posts-list">
+  {{/* Row 2: recent posts full width */}}
+  {{ $postsPage := site.GetPage "/posts" }}
+  <div class="bento-card bento-card--posts">
+    <div class="bento-posts-header">
+      <span class="bento-card-eyebrow">Recent Posts</span>
+      {{ with $postsPage }}<a href="{{ .RelPermalink }}" class="bento-posts-link">View all →</a>{{ end }}
+    </div>
+    <div class="bento-posts-list">
+      {{ $allPosts := slice }}
+      {{ with $postsPage }}{{ $allPosts = .RegularPages.ByDate.Reverse }}{{ end }}
+      {{ $rest := after 1 $allPosts }}
+      {{ if $rest }}
         {{ range first 4 $rest }}
         <a href="{{ .RelPermalink }}" class="bento-post-row">
           <span class="bento-post-title">{{ .Title }}</span>
-          <time class="bento-post-date">{{ .Date.Format "Jan 2006" }}</time>
+          <time class="bento-post-date">{{ .Date.Format "Jan 2, 2006" }}</time>
+        </a>
+        {{ end }}
+      {{ else }}
+        <span class="bento-posts-empty">No posts yet.</span>
+      {{ end }}
+    </div>
+  </div>
+
+  {{/* Row 3: projects ticker */}}
+  {{ with site.GetPage "/projects" }}
+    {{ $sections := .Sections.ByWeight }}
+    {{ if $sections }}
+    {{ $duration := printf "%.1fs" (mul (float (len $sections)) 5.0) }}
+    <div class="projects-ticker" style="--ticker-duration: {{ $duration }}">
+      <div class="projects-track">
+        {{ range $sections }}
+        <a href="{{ .RelPermalink }}" class="bento-card ticker-card">
+          <div class="bento-card-eyebrow">Project</div>
+          <h2 class="bento-card-title">{{ .Title }}</h2>
+          {{ with .Description }}
+          <p class="bento-card-desc">{{ . }}</p>
+          {{ end }}
+          <div class="bento-card-footer">
+            <span class="bento-card-count">{{ len .RegularPages }} posts</span>
+            <span class="bento-card-arrow">→</span>
+          </div>
+        </a>
+        {{ end }}
+        {{/* Duplicate for seamless loop */}}
+        {{ range $sections }}
+        <a href="{{ .RelPermalink }}" class="bento-card ticker-card" aria-hidden="true" tabindex="-1">
+          <div class="bento-card-eyebrow">Project</div>
+          <h2 class="bento-card-title">{{ .Title }}</h2>
+          {{ with .Description }}
+          <p class="bento-card-desc">{{ . }}</p>
+          {{ end }}
+          <div class="bento-card-footer">
+            <span class="bento-card-count">{{ len .RegularPages }} posts</span>
+            <span class="bento-card-arrow">→</span>
+          </div>
         </a>
         {{ end }}
       </div>
