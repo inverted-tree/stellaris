@@ -153,6 +153,36 @@ fn main() {}
 
 `lang` and `file` are both optional. Language is auto-detected when omitted.
 
+## Post QR codes
+
+Each post footer displays a small QR code that links to that post's URL — useful for sharing from a printed page or slide deck.
+
+QR codes are generated as SVGs at build time by `.github/scripts/generate_qr.py` using the [`qrcode`](https://pypi.org/project/qrcode/) library, and saved to `static/qr/` before Hugo runs. The GitHub Actions deploy workflow handles this automatically.
+
+### Generating manually
+
+Install the dependency once:
+
+```sh
+pip install "qrcode[svg]"
+```
+
+Then run the script with your site's base URL:
+
+```sh
+python .github/scripts/generate_qr.py https://example.org
+```
+
+This populates `static/qr/` with one SVG per post, mirroring the content structure:
+
+```
+static/qr/
+  posts/post-1.svg
+  projects/my-project/01-intro.svg
+```
+
+Run the script whenever you add or rename posts, then `hugo server` as normal. The `static/qr/` directory is gitignored since it's a build artifact.
+
 ## Fonts
 
 Ships with IBM Plex Sans, IBM Plex Mono, and IBM Plex Math, all self-hosted under `static/fonts/`. To swap in a different font:

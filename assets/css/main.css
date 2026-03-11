@@ -723,6 +723,42 @@ details.nav-subsection[open] > summary > .nav-arrow {
 }
 
 /* ============================================================
+   Post QR Code
+   ============================================================ */
+
+.post-qr {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-top: 3rem;
+  margin-inline: auto;
+  max-width: var(--content-max);
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+.post-qr-code {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--r-sm);
+  opacity: 0.6;
+  transition: opacity 0.15s;
+}
+
+.post-qr-code:hover {
+  opacity: 1;
+}
+
+.post-qr-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-faint);
+}
+
+/* ============================================================
    TOC Column
    ============================================================ */
 .toc-col {

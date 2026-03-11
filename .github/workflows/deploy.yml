@@ -40,6 +40,12 @@ jobs:
       - name: Install Hugo modules
         run: hugo mod get
 
+      - name: Install QR dependencies
+        run: pip install "qrcode[svg]"
+
+      - name: Generate QR codes
+        run: python .github/scripts/generate_qr.py "${{ steps.pages.outputs.base_url }}"
+
       - name: Build
         run: hugo --minify --baseURL "${{ steps.pages.outputs.base_url }}/"
 
