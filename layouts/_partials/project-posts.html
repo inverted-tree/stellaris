@@ -1,7 +1,7 @@
 {{/* Show a series strip when the post lives inside a project sub-section
      (i.e. its parent section has more than one post) */}}
 {{ $page := . }}
-{{ if and .Parent (not .Parent.IsHome) .Parent.IsSection }}
+{{ if and .Parent (not .Parent.IsHome) .Parent.IsSection .Parent.Parent (not .Parent.Parent.IsHome) }}
   {{ if gt (len .Parent.RegularPages) 1 }}
   <nav class="series-strip" aria-label="Other posts in this series">
     <div class="series-strip-label">Part of</div>
