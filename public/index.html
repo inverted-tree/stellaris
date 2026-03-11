@@ -50,9 +50,13 @@
   <main class="main-content main-content--home">
     
 
+
+
 <section class="hero">
   <p class="hero-eyebrow">Stellaris</p>
-  <h1 class="hero-title">Writing about<br><em>things I build</em></h1>
+  <h1 class="hero-title">
+    Writing about<br><span class="hero-typewriter" style="animation-duration: 1.40s, 0.7s; animation-timing-function: steps(14, end), step-end">things I build</span>
+  </h1>
   
   <p class="hero-subtitle">Writing about things I build and explore.</p>
   
@@ -66,70 +70,80 @@
   </div>
 </section>
 
-
-
-  
-  <section class="home-section">
-    <div class="home-section-header">
-      <h2 class="home-section-title">Projects</h2>
-      <a href="/projects/" class="home-section-link">View all →</a>
-    </div>
-    <div class="project-tiles">
-      
-      <a href="/projects/ray-tracer/" class="project-tile">
-        <span class="project-tile-title">Building a Ray Tracer</span>
-        
-        <span class="project-tile-desc">A deep dive into implementing a physically-based ray tracer from scratch in Rust — covering the math, BVH acceleration, and a few unexpected detours.</span>
-        
-        <div class="project-tile-meta">
-          <span class="project-tile-count">3 posts</span>
-        </div>
-      </a>
-      
-      <a href="/projects/type-system-explorations/" class="project-tile">
-        <span class="project-tile-title">Type System Explorations</span>
-        
-        <span class="project-tile-desc">Notes from pushing Rust&#39;s type system to its limits: type-level state machines, const generics, and zero-cost abstractions.</span>
-        
-        <div class="project-tile-meta">
-          <span class="project-tile-count">1 posts</span>
-        </div>
-      </a>
-      
-    </div>
-  </section>
-  
-
-
-
+<div class="bento-grid">
 
   
-  <section class="home-section">
-    <div class="home-section-header">
-      <h2 class="home-section-title">Recent Posts</h2>
-      <a href="/posts/" class="home-section-link">View all →</a>
-    </div>
-    <div class="recent-posts-list">
+  
+    
+    
+    <a href="/projects/ray-tracer/" class="bento-card bento-card--featured">
+      <div class="bento-card-eyebrow">Featured Project</div>
+      <h2 class="bento-card-title">Building a Ray Tracer</h2>
       
-      <a href="/posts/post-3/" class="recent-post-item">
-        <span class="recent-post-title">Choosing a PRNG for Simulations</span>
-        <time class="recent-post-date">Mar 2024</time>
-      </a>
+      <p class="bento-card-desc">A deep dive into implementing a physically-based ray tracer from scratch in Rust — covering the math, BVH acceleration, and a few unexpected detours.</p>
       
-      <a href="/posts/post-2/" class="recent-post-item">
-        <span class="recent-post-title">Ergonomic Error Handling in Rust</span>
-        <time class="recent-post-date">Feb 2024</time>
-      </a>
+      <div class="bento-card-footer">
+        <span class="bento-card-count">3 posts</span>
+        <span class="bento-card-arrow">→</span>
+      </div>
+    </a>
+    
+    
+    <a href="/projects/type-system-explorations/" class="bento-card bento-card--project">
+      <div class="bento-card-eyebrow">Project</div>
+      <h2 class="bento-card-title">Type System Explorations</h2>
       
-      <a href="/posts/post-1/" class="recent-post-item">
-        <span class="recent-post-title">Floating-Point Pitfalls in Graphics Code</span>
-        <time class="recent-post-date">Jan 2024</time>
-      </a>
+      <p class="bento-card-desc">Notes from pushing Rust&#39;s type system to its limits: type-level state machines, const generics, and zero-cost abstractions.</p>
       
-    </div>
-  </section>
+      <div class="bento-card-footer">
+        <span class="bento-card-count">1 posts</span>
+        <span class="bento-card-arrow">→</span>
+      </div>
+    </a>
+    
   
 
+  
+  
+    
+    <a href="/posts/post-3/" class="bento-card bento-card--latest">
+      <div class="bento-card-eyebrow">Latest Post</div>
+      <h2 class="bento-card-title">Choosing a PRNG for Simulations</h2>
+      
+      <p class="bento-card-desc">Why the default random number generator is often wrong for simulations, and how to pick a better one.</p>
+      
+      <time class="bento-card-date">Mar 15, 2024</time>
+    </a>
+    
+  
+
+  
+  
+    
+    
+    <div class="bento-card bento-card--posts">
+      <div class="bento-posts-header">
+        <span class="bento-card-eyebrow">Recent Posts</span>
+        <a href="/posts/" class="bento-posts-link">View all →</a>
+      </div>
+      <div class="bento-posts-list">
+        
+        <a href="/posts/post-2/" class="bento-post-row">
+          <span class="bento-post-title">Ergonomic Error Handling in Rust</span>
+          <time class="bento-post-date">Feb 2024</time>
+        </a>
+        
+        <a href="/posts/post-1/" class="bento-post-row">
+          <span class="bento-post-title">Floating-Point Pitfalls in Graphics Code</span>
+          <time class="bento-post-date">Jan 2024</time>
+        </a>
+        
+      </div>
+    </div>
+    
+  
+
+</div>
 
 
   </main>

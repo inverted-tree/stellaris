@@ -1,8 +1,13 @@
 {{ define "main" }}
 
+{{ $typeText := site.Params.heroTitle | default "things I build" }}
+{{ $chars := len $typeText }}
 <section class="hero">
   <p class="hero-eyebrow">{{ site.Title }}</p>
-  <h1 class="hero-title">{{ with site.Params.heroTitle }}{{ . }}{{ else }}Writing about<br><em>things I build</em>{{ end }}</h1>
+  <h1 class="hero-title">
+    {{ if not site.Params.heroTitle }}Writing about<br>{{ end -}}
+    <span class="hero-typewriter" style="animation-duration: {{ printf "%.2f" (mul (float $chars) 0.1) }}s, 0.7s; animation-timing-function: steps({{ $chars }}, end), step-end">{{ $typeText }}</span>
+  </h1>
   {{ with site.Params.description }}
   <p class="hero-subtitle">{{ . }}</p>
   {{ end }}
@@ -16,49 +21,74 @@
   </div>
 </section>
 
-{{/* Projects section */}}
-{{ with site.GetPage "/projects" }}
-  {{ if .Sections }}
-  <section class="home-section">
-    <div class="home-section-header">
-      <h2 class="home-section-title">Projects</h2>
-      <a href="{{ .RelPermalink }}" class="home-section-link">View all →</a>
-    </div>
-    <div class="project-tiles">
-      {{ range .Sections.ByWeight }}
-      <a href="{{ .RelPermalink }}" class="project-tile">
-        <span class="project-tile-title">{{ .Title }}</span>
-        {{ with .Description }}
-        <span class="project-tile-desc">{{ . }}</span>
-        {{ end }}
-        <div class="project-tile-meta">
-          <span class="project-tile-count">{{ len .RegularPages }} posts</span>
-        </div>
-      </a>
-      {{ end }}
-    </div>
-  </section>
-  {{ end }}
-{{ end }}
+<div class="bento-grid">
 
-{{/* Recent standalone posts */}}
-{{ with site.GetPage "/posts" }}
-  {{ if .RegularPages }}
-  <section class="home-section">
-    <div class="home-section-header">
-      <h2 class="home-section-title">Recent Posts</h2>
-      <a href="{{ .RelPermalink }}" class="home-section-link">View all →</a>
-    </div>
-    <div class="recent-posts-list">
-      {{ range first 6 .RegularPages.ByDate.Reverse }}
-      <a href="{{ .RelPermalink }}" class="recent-post-item">
-        <span class="recent-post-title">{{ .Title }}</span>
-        <time class="recent-post-date">{{ .Date.Format "Jan 2006" }}</time>
-      </a>
+  {{/* Projects — first is featured (wide), rest are regular */}}
+  {{ with site.GetPage "/projects" }}
+    {{ $sections := .Sections.ByWeight }}
+    {{ with index $sections 0 }}
+    <a href="{{ .RelPermalink }}" class="bento-card bento-card--featured">
+      <div class="bento-card-eyebrow">Featured Project</div>
+      <h2 class="bento-card-title">{{ .Title }}</h2>
+      {{ with .Description }}
+      <p class="bento-card-desc">{{ . }}</p>
       {{ end }}
-    </div>
-  </section>
+      <div class="bento-card-footer">
+        <span class="bento-card-count">{{ len .RegularPages }} posts</span>
+        <span class="bento-card-arrow">→</span>
+      </div>
+    </a>
+    {{ end }}
+    {{ range after 1 $sections }}
+    <a href="{{ .RelPermalink }}" class="bento-card bento-card--project">
+      <div class="bento-card-eyebrow">Project</div>
+      <h2 class="bento-card-title">{{ .Title }}</h2>
+      {{ with .Description }}
+      <p class="bento-card-desc">{{ . }}</p>
+      {{ end }}
+      <div class="bento-card-footer">
+        <span class="bento-card-count">{{ len .RegularPages }} posts</span>
+        <span class="bento-card-arrow">→</span>
+      </div>
+    </a>
+    {{ end }}
   {{ end }}
-{{ end }}
+
+  {{/* Latest post — highlighted card */}}
+  {{ with site.GetPage "/posts" }}
+    {{ with (index (.RegularPages.ByDate.Reverse) 0) }}
+    <a href="{{ .RelPermalink }}" class="bento-card bento-card--latest">
+      <div class="bento-card-eyebrow">Latest Post</div>
+      <h2 class="bento-card-title">{{ .Title }}</h2>
+      {{ with .Description }}
+      <p class="bento-card-desc">{{ . }}</p>
+      {{ end }}
+      <time class="bento-card-date">{{ .Date.Format "Jan 2, 2006" }}</time>
+    </a>
+    {{ end }}
+  {{ end }}
+
+  {{/* Recent posts list — skips the latest already shown above */}}
+  {{ with site.GetPage "/posts" }}
+    {{ $rest := after 1 .RegularPages.ByDate.Reverse }}
+    {{ if $rest }}
+    <div class="bento-card bento-card--posts">
+      <div class="bento-posts-header">
+        <span class="bento-card-eyebrow">Recent Posts</span>
+        <a href="{{ .RelPermalink }}" class="bento-posts-link">View all →</a>
+      </div>
+      <div class="bento-posts-list">
+        {{ range first 4 $rest }}
+        <a href="{{ .RelPermalink }}" class="bento-post-row">
+          <span class="bento-post-title">{{ .Title }}</span>
+          <time class="bento-post-date">{{ .Date.Format "Jan 2006" }}</time>
+        </a>
+        {{ end }}
+      </div>
+    </div>
+    {{ end }}
+  {{ end }}
+
+</div>
 
 {{ end }}
