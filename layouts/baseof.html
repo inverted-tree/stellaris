@@ -18,6 +18,9 @@
   <main class="main-content main-content--home">
     {{ block "main" . }}{{ end }}
   </main>
+  <footer class="site-footer">
+    {{ partial "footer.html" . }}
+  </footer>
   {{- else }}
   {{- $hasToc := and .TableOfContents (ne .Kind "taxonomy") (ne .Kind "term") (ne .Kind "section") }}
   <div class="body-wrap{{ if $hasToc }} body-wrap--toc{{ end }}">
@@ -33,12 +36,11 @@
       {{ partial "toc.html" . }}
     </aside>
     {{- end }}
+    <footer class="site-footer">
+      {{ partial "footer.html" . }}
+    </footer>
   </div>
   {{- end }}
-
-  <footer class="site-footer">
-    {{ partial "footer.html" . }}
-  </footer>
 
 </div>
 
