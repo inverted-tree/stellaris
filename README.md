@@ -176,3 +176,7 @@ Design tokens live in `assets/css/main.css`:
 `--accent`, `--font-sans`, and `--font-mono` are injected from `hugo.toml` — don't set them in CSS directly.
 
 Syntax highlighting uses a Catppuccin-inspired palette. To swap it out: `hugo gen chromastyles --style=monokai` and replace the `.chroma` rules in `main.css`.
+
+---
+
+Inspired by [zed.dev/docs](https://zed.dev/docs). Built by [inverted-tree](https://github.com/inverted-tree) with Claude Sonnet 4.6.
