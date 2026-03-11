@@ -1,0 +1,14 @@
+{{ $file := .Get "file" }}
+{{ $lang := .Get "lang" | default "" }}
+<div class="code-block">
+  {{ with $file }}
+  <div class="code-filename">
+    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M4 2h6l4 4v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"/>
+      <path d="M10 2v4h4" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"/>
+    </svg>
+    <span>{{ . }}</span>
+  </div>
+  {{ end }}
+  {{ highlight (trim .Inner "\n") $lang "" }}
+</div>

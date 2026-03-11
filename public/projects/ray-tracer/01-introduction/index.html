@@ -10,6 +10,19 @@
 
     <link rel="stylesheet" href="/css/main.css">
 
+<link rel="stylesheet" href="/katex/katex.min.css">
+<script defer src="/katex/katex.min.js"></script>
+<script defer src="/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '\\[', right: '\\]', display: true},
+      {left: '$',  right: '$',  display: false},
+      {left: '\\(', right: '\\)', display: false}
+    ],
+    throwOnError: false
+  })"></script>
+
 
       <script src="/js/main.js"></script>
 
@@ -224,7 +237,19 @@
 <p>No GPU, no CUDA, no fancy APIs. Just vectors, rays, and math.</p>
 <h2 id="the-core-abstraction">The Core Abstraction</h2>
 <p>Everything in a ray tracer starts with a <code>Ray</code>. A ray is just an origin point and a direction vector, parameterized by <code>t</code>:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="cp">#[derive(Clone, Copy, Debug)]</span><span class="w">
+
+
+<div class="code-block">
+  
+  <div class="code-filename">
+    <svg width="13" height="13" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M4 2h6l4 4v8a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V3a1 1 0 0 1 1-1z" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"/>
+      <path d="M10 2v4h4" stroke="currentColor" stroke-width="1.25" stroke-linejoin="round"/>
+    </svg>
+    <span>src/ray.rs</span>
+  </div>
+  
+  <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="cp">#[derive(Clone, Copy, Debug)]</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="k">pub</span><span class="w"> </span><span class="k">struct</span> <span class="nc">Ray</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">origin</span>: <span class="nc">Vec3</span><span class="p">,</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">direction</span>: <span class="nc">Vec3</span><span class="p">,</span><span class="w">
@@ -238,8 +263,10 @@
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span> <span class="nf">at</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">t</span>: <span class="kt">f32</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nc">Vec3</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="bp">self</span><span class="p">.</span><span class="n">origin</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">t</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">direction</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="p">}</span><span class="w">
-</span></span></span></code></pre></div><p>The <code>at(t)</code> method gives you the point along the ray at parameter <code>t</code>. Intersection testing is entirely about finding the right value of <code>t</code>.</p>
+</span></span></span><span class="line"><span class="cl"><span class="p">}</span></span></span></code></pre></div>
+</div>
+
+<p>The <code>at(t)</code> method gives you the point along the ray at parameter <code>t</code>. Intersection testing is entirely about finding the right value of <code>t</code>.</p>
 <h2 id="vector-math">Vector Math</h2>
 <p>All of this rests on three-component vectors. Rather than pulling in a dependency like <code>glam</code>, we&rsquo;ll implement a minimal <code>Vec3</code> type. The operations we need are:</p>
 <ul>
@@ -312,5 +339,6 @@
   </footer>
 
 </div>
+
 </body>
 </html>

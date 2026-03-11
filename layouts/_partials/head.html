@@ -6,4 +6,5 @@
 {{ end }}
 <meta name="color-scheme" content="dark">
 {{ partial "head/css.html" . }}
+{{ if .Param "math" }}{{ partialCached "math.html" . }}{{ end }}
 {{ partial "head/js.html" . }}

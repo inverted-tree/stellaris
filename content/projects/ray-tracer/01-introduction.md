@@ -3,6 +3,7 @@ title = 'Why Write a Ray Tracer?'
 date = 2024-01-10
 draft = false
 tags = ['rust', 'graphics', 'math']
+math = true
 description = 'Motivation, goals, and the math foundations before writing a single line of code.'
 +++
 
@@ -23,7 +24,7 @@ No GPU, no CUDA, no fancy APIs. Just vectors, rays, and math.
 
 Everything in a ray tracer starts with a `Ray`. A ray is just an origin point and a direction vector, parameterized by `t`:
 
-```rust
+{{< code file="src/ray.rs" lang="rust" >}}
 #[derive(Clone, Copy, Debug)]
 pub struct Ray {
     pub origin: Vec3,
@@ -39,7 +40,7 @@ impl Ray {
         self.origin + t * self.direction
     }
 }
-```
+{{< /code >}}
 
 The `at(t)` method gives you the point along the ray at parameter `t`. Intersection testing is entirely about finding the right value of `t`.
 

@@ -20,7 +20,7 @@
       <link>http://localhost:1313/projects/ray-tracer/02-sphere-intersection/</link>
       <pubDate>Wed, 24 Jan 2024 00:00:00 +0000</pubDate>
       <guid>http://localhost:1313/projects/ray-tracer/02-sphere-intersection/</guid>
-      <description>&lt;p&gt;The sphere is the &amp;ldquo;Hello World&amp;rdquo; of ray tracing because the intersection math is clean and closed-form. Given a ray $\mathbf{r}(t) = \mathbf{o} + t\mathbf{d}$ and a sphere centered at $\mathbf{c}$ with radius $r$, we want the smallest positive $t$ where the ray touches the sphere surface.&lt;/p&gt;&#xA;&lt;h2 id=&#34;derivation&#34;&gt;Derivation&lt;/h2&gt;&#xA;&lt;p&gt;A point $\mathbf{p}$ is on the sphere if $|\mathbf{p} - \mathbf{c}|^2 = r^2$. Substituting the ray:&lt;/p&gt;&#xA;&lt;p&gt;$$|(\mathbf{o} + t\mathbf{d}) - \mathbf{c}|^2 = r^2$$&lt;/p&gt;</description>
+      <description>&lt;p&gt;The sphere is the &amp;ldquo;Hello World&amp;rdquo; of ray tracing because the intersection math is clean and closed-form. Given a ray $\mathbf{r}(t) = \mathbf{o} + t\mathbf{d}$ and a sphere centered at $\mathbf{c}$ with radius $r$, we want the smallest positive $t$ where the ray touches the sphere surface.&lt;/p&gt;&#xA;&lt;h2 id=&#34;derivation&#34;&gt;Derivation&lt;/h2&gt;&#xA;&lt;p&gt;A point $\mathbf{p}$ is on the sphere if $|\mathbf{p} - \mathbf{c}|^2 = r^2$. Substituting the ray:&lt;/p&gt;&#xA;$$|(\mathbf{o} + t\mathbf{d}) - \mathbf{c}|^2 = r^2$$&lt;p&gt;Let $\mathbf{oc} = \mathbf{o} - \mathbf{c}$. Expanding:&lt;/p&gt;</description>
     </item>
     <item>
       <title>Why Write a Ray Tracer?</title>

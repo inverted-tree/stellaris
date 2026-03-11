@@ -10,6 +10,19 @@
 
     <link rel="stylesheet" href="/css/main.css">
 
+<link rel="stylesheet" href="/katex/katex.min.css">
+<script defer src="/katex/katex.min.js"></script>
+<script defer src="/katex/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, {
+    delimiters: [
+      {left: '$$', right: '$$', display: true},
+      {left: '\\[', right: '\\]', display: true},
+      {left: '$',  right: '$',  display: false},
+      {left: '\\(', right: '\\)', display: false}
+    ],
+    throwOnError: false
+  })"></script>
+
 
       <script src="/js/main.js"></script>
 
@@ -215,10 +228,8 @@
     <p>The sphere is the &ldquo;Hello World&rdquo; of ray tracing because the intersection math is clean and closed-form. Given a ray $\mathbf{r}(t) = \mathbf{o} + t\mathbf{d}$ and a sphere centered at $\mathbf{c}$ with radius $r$, we want the smallest positive $t$ where the ray touches the sphere surface.</p>
 <h2 id="derivation">Derivation</h2>
 <p>A point $\mathbf{p}$ is on the sphere if $|\mathbf{p} - \mathbf{c}|^2 = r^2$. Substituting the ray:</p>
-<p>$$|(\mathbf{o} + t\mathbf{d}) - \mathbf{c}|^2 = r^2$$</p>
-<p>Let $\mathbf{oc} = \mathbf{o} - \mathbf{c}$. Expanding:</p>
-<p>$$t^2(\mathbf{d} \cdot \mathbf{d}) + 2t(\mathbf{oc} \cdot \mathbf{d}) + (\mathbf{oc} \cdot \mathbf{oc} - r^2) = 0$$</p>
-<p>This is a standard quadratic $at^2 + bt + c = 0$. The discriminant $b^2 - 4ac$ tells us whether the ray misses ($&lt; 0$), grazes ($= 0$), or hits ($&gt; 0$) the sphere.</p>
+$$|(\mathbf{o} + t\mathbf{d}) - \mathbf{c}|^2 = r^2$$<p>Let $\mathbf{oc} = \mathbf{o} - \mathbf{c}$. Expanding:</p>
+$$t^2(\mathbf{d} \cdot \mathbf{d}) + 2t(\mathbf{oc} \cdot \mathbf{d}) + (\mathbf{oc} \cdot \mathbf{oc} - r^2) = 0$$<p>This is a standard quadratic $at^2 + bt + c = 0$. The discriminant $b^2 - 4ac$ tells us whether the ray misses ($< 0$), grazes ($= 0$), or hits ($> 0$) the sphere.</p>
 <h2 id="implementation">Implementation</h2>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="k">pub</span><span class="w"> </span><span class="k">struct</span> <span class="nc">Sphere</span><span class="w"> </span><span class="p">{</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">center</span>: <span class="nc">Vec3</span><span class="p">,</span><span class="w">
@@ -337,5 +348,6 @@
   </footer>
 
 </div>
+
 </body>
 </html>

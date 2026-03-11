@@ -3,6 +3,7 @@ title = 'Diffuse Materials and Monte Carlo Sampling'
 date = 2024-02-07
 draft = false
 tags = ['rust', 'graphics', 'math', 'probability']
+math = true
 description = 'Implementing Lambertian diffuse shading using Monte Carlo integration and random hemisphere sampling.'
 +++
 

@@ -3,6 +3,7 @@ title = 'Sphere Intersection and the First Image'
 date = 2024-01-24
 draft = false
 tags = ['rust', 'graphics', 'math']
+math = true
 description = 'Deriving the ray-sphere intersection formula and rendering the first normal-mapped image.'
 +++
 
