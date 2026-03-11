@@ -2,30 +2,30 @@
    Custom Properties
    ============================================================ */
 :root {
-  --bg:              #0c111b;
-  --bg-sidebar:      #0e1521;
-  --bg-surface:      #111826;
-  --bg-elevated:     #19273b;
-  --bg-hover:        #1d2d42;
-  --border:          #1c2b3a;
-  --border-light:    #253648;
+  --bg:              #111111;
+  --bg-sidebar:      #131313;
+  --bg-surface:      #181818;
+  --bg-elevated:     #202020;
+  --bg-hover:        #252525;
+  --border:          #272727;
+  --border-light:    #323232;
 
-  --accent:          #4d84f5;
-  --accent-hover:    #6b9df7;
-  --accent-dim:      rgba(77, 132, 245, 0.15);
-  --accent-dim2:     rgba(77, 132, 245, 0.08);
+  --accent:          #9b72f5;
+  --accent-hover:    #b597f8;
+  --accent-dim:      rgba(155, 114, 245, 0.15);
+  --accent-dim2:     rgba(155, 114, 245, 0.08);
 
-  --text:            #bfcdd9;
-  --text-muted:      #566e8a;
-  --text-faint:      #344f67;
-  --heading:         #dde7f2;
+  --text:            #c8c8c8;
+  --text-muted:      #707070;
+  --text-faint:      #484848;
+  --heading:         #e8e8e8;
 
   /* Code */
-  --code-bg:         #0e1825;
-  --code-border:     #1c2d3e;
+  --code-bg:         #0e0e0e;
+  --code-border:     #242424;
   --code-text:       #cdd6f4;
-  --inline-code-bg:  #152030;
-  --inline-code-text: #89b4fa;
+  --inline-code-bg:  #1c1c1c;
+  --inline-code-text: #c4a7fa;
 
   /* Syntax tokens */
   --syn-keyword:  #cba6f7;
@@ -87,7 +87,7 @@ body::after {
   background-image: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/></filter><rect width='200' height='200' filter='url(%23n)' opacity='1'/></svg>");
   background-repeat: repeat;
   background-size: 180px 180px;
-  opacity: 0.032;
+  opacity: 0.09;
 }
 
 /* ============================================================
@@ -107,7 +107,7 @@ body::after {
   display: flex;
   align-items: center;
   padding: 0 1.25rem;
-  background-color: rgba(12, 17, 27, 0.88);
+  background-color: rgba(17, 17, 17, 0.88);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-bottom: 1px solid var(--border);
@@ -382,7 +382,7 @@ details.nav-subsection[open] > summary > .nav-arrow {
 .prose a {
   color: var(--accent);
   text-decoration: none;
-  border-bottom: 1px solid rgba(77, 132, 245, 0.3);
+  border-bottom: 1px solid rgba(155, 114, 245, 0.3);
   transition: color 0.12s, border-color 0.12s;
 }
 
@@ -617,7 +617,7 @@ details.nav-subsection[open] > summary > .nav-arrow {
   font-family: var(--font-mono);
   color: var(--accent);
   background: var(--accent-dim2);
-  border: 1px solid rgba(77, 132, 245, 0.18);
+  border: 1px solid rgba(155, 114, 245, 0.18);
   border-radius: 999px;
   text-decoration: none;
   transition: background 0.12s, border-color 0.12s, color 0.12s;
@@ -625,7 +625,7 @@ details.nav-subsection[open] > summary > .nav-arrow {
 
 .tag-pill:hover {
   background: var(--accent-dim);
-  border-color: rgba(77, 132, 245, 0.4);
+  border-color: rgba(155, 114, 245, 0.4);
   color: var(--accent-hover);
 }
 
@@ -822,7 +822,7 @@ details.nav-subsection[open] > summary > .nav-arrow {
 }
 
 .subsection-card:hover {
-  border-color: rgba(77, 132, 245, 0.3);
+  border-color: rgba(155, 114, 245, 0.3);
   background: var(--bg-elevated);
 }
 
@@ -1039,7 +1039,7 @@ details.nav-subsection[open] > summary > .nav-arrow {
 }
 
 .project-tile:hover {
-  border-color: rgba(77, 132, 245, 0.3);
+  border-color: rgba(155, 114, 245, 0.3);
   background: var(--bg-elevated);
   transform: translateY(-1px);
 }
@@ -1144,7 +1144,7 @@ details.nav-subsection[open] > summary > .nav-arrow {
 
 .taxonomy-tag:hover {
   color: var(--accent-hover);
-  border-color: rgba(77, 132, 245, 0.3);
+  border-color: rgba(155, 114, 245, 0.3);
   background: var(--bg-elevated);
 }
 
