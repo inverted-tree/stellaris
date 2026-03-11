@@ -5,6 +5,9 @@
 
 Stellaris is built around two content types: standalone posts and multi-part project series. It includes a bento-grid home page, a scrolling projects ticker, KaTeX math rendering, syntax highlighting, and a contextual sidebar navigation that reflects the current page's location in the content hierarchy.
 
+![Home page](docs/preview-home.png)
+![Post page](docs/preview-post.png)
+
 **Requirements:** Hugo 0.146.0 or later (standard build, extended not required).
 
 ## Getting Started
