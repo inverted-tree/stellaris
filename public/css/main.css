@@ -995,8 +995,7 @@ details.nav-subsection[open] > summary > .nav-arrow {
 }
 
 @keyframes hero-typing {
-  from { clip-path: inset(0 100% 0 0); }
-  to   { clip-path: inset(0 0% 0 0); }
+  from { width: 0; }
 }
 
 @keyframes hero-blink {
@@ -1005,21 +1004,23 @@ details.nav-subsection[open] > summary > .nav-arrow {
 
 .hero-typewriter {
   display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
   white-space: nowrap;
+  font-family: var(--font-mono);
   color: var(--accent);
   border-right: 2px solid var(--accent);
-  padding-right: 3px;
-  clip-path: inset(0 100% 0 0);
+  width: 0;
   animation-name: hero-typing, hero-blink;
-  animation-delay: 0.4s, 0.4s;
   animation-fill-mode: forwards, none;
   animation-iteration-count: 1, infinite;
-  /* animation-duration and animation-timing-function set by inline style */
+  /* width, animation-duration and animation-timing-function set by inline style */
 }
 
 @media (prefers-reduced-motion: reduce) {
   .hero-typewriter {
-    clip-path: none;
+    overflow: visible;
+    width: auto !important;
     animation: none;
     border-right: none;
   }

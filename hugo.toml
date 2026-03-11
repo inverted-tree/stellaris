@@ -3,9 +3,10 @@ languageCode = 'en-US'
 title = 'Stellaris'
 
 [params]
-  description = 'Writing about things I build and explore.'
+  description = 'A minimal Hugo theme for technical writing — dark, opinionated, and easy to configure.'
+  heroTitle = 'your next Hugo site.'
   accentColor = '#f97316'  # theme accent — change to any CSS color
-  featuredProject = 'type-system-explorations'  # slug of the project to feature on the home page
+  featuredProject = 'ray-tracer'  # slug of the project to feature on the home page
 
 [taxonomies]
   tag = 'tags'

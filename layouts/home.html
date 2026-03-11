@@ -1,12 +1,14 @@
 {{ define "main" }}
 
-{{ $typeText := site.Params.heroTitle | default "things I build" }}
+{{ $typeText := site.Params.heroTitle | default "things I build." }}
 {{ $chars := len $typeText }}
+{{ $typeDuration := mul (float $chars) 0.065 }}
+{{ $blinkDelay := add 0.4 $typeDuration }}
 <section class="hero">
   <p class="hero-eyebrow">{{ site.Title }}</p>
   <h1 class="hero-title">
-    {{ if not site.Params.heroTitle }}Writing about<br>{{ end -}}
-    <span class="hero-typewriter" style="animation-duration: {{ printf "%.2f" (mul (float $chars) 0.1) }}s, 0.7s; animation-timing-function: steps({{ $chars }}, end), step-end">{{ $typeText }}</span>
+    {{ if not site.Params.heroTitle }}Built for<br>{{ end -}}
+    <span class="hero-typewriter" style="width: {{ $chars }}ch; animation-duration: {{ printf "%.2f" $typeDuration }}s, 0.7s; animation-timing-function: steps({{ $chars }}, end), step-end; animation-delay: 0.4s, {{ printf "%.2f" $blinkDelay }}s">{{ $typeText }}</span>
   </h1>
   {{ with site.Params.description }}
   <p class="hero-subtitle">{{ . }}</p>

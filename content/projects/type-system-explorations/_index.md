@@ -1,5 +1,5 @@
 +++
 title = 'Type System Explorations'
-description = "Notes from pushing Rust's type system to its limits: type-level state machines, const generics, and zero-cost abstractions."
+description = 'A second example project — shows how multiple series coexist, each with independent sidebar trees and series strips at the bottom of every post.'
 weight = 2
 +++
