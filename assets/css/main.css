@@ -11,9 +11,9 @@
   --border-light:    #323232;
 
   --accent:          #9b72f5;
-  --accent-hover:    #b597f8;
-  --accent-dim:      rgba(155, 114, 245, 0.15);
-  --accent-dim2:     rgba(155, 114, 245, 0.08);
+  --accent-hover:    color-mix(in srgb, var(--accent), white 20%);
+  --accent-dim:      color-mix(in srgb, var(--accent) 15%, transparent);
+  --accent-dim2:     color-mix(in srgb, var(--accent) 8%, transparent);
 
   --text:            #c8c8c8;
   --text-muted:      #707070;
@@ -25,7 +25,7 @@
   --code-border:     #242424;
   --code-text:       #cdd6f4;
   --inline-code-bg:  #1c1c1c;
-  --inline-code-text: #c4a7fa;
+  --inline-code-text: color-mix(in srgb, var(--accent), white 25%);
 
   /* Syntax tokens */
   --syn-keyword:  #cba6f7;
@@ -386,7 +386,7 @@ details.nav-subsection[open] > summary > .nav-arrow {
 .prose a {
   color: var(--accent);
   text-decoration: none;
-  border-bottom: 1px solid rgba(155, 114, 245, 0.3);
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
   transition: color 0.12s, border-color 0.12s;
 }
 
@@ -623,7 +623,7 @@ details.nav-subsection[open] > summary > .nav-arrow {
   font-family: var(--font-mono);
   color: var(--accent);
   background: var(--accent-dim2);
-  border: 1px solid rgba(155, 114, 245, 0.18);
+  border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
   border-radius: 999px;
   text-decoration: none;
   transition: background 0.12s, border-color 0.12s, color 0.12s;
@@ -631,7 +631,7 @@ details.nav-subsection[open] > summary > .nav-arrow {
 
 .tag-pill:hover {
   background: var(--accent-dim);
-  border-color: rgba(155, 114, 245, 0.4);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
   color: var(--accent-hover);
 }
 
@@ -839,7 +839,7 @@ details.nav-subsection[open] > summary > .nav-arrow {
 }
 
 .subsection-card:hover {
-  border-color: rgba(155, 114, 245, 0.3);
+  border-color: color-mix(in srgb, var(--accent) 30%, transparent);
   background: var(--bg-elevated);
 }
 
@@ -959,7 +959,7 @@ details.nav-subsection[open] > summary > .nav-arrow {
   font-size: 0.85rem;
   color: var(--accent);
   background: var(--accent-dim2);
-  border: 1px solid rgba(155, 114, 245, 0.18);
+  border: 1px solid color-mix(in srgb, var(--accent) 18%, transparent);
   border-radius: var(--r-md);
   text-decoration: none;
   transition: background 0.12s, border-color 0.12s;
@@ -967,7 +967,7 @@ details.nav-subsection[open] > summary > .nav-arrow {
 
 .not-found-link:hover {
   background: var(--accent-dim);
-  border-color: rgba(155, 114, 245, 0.4);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
 }
 
 .hero {
@@ -1109,7 +1109,7 @@ details.nav-subsection[open] > summary > .nav-arrow {
 }
 
 .project-tile:hover {
-  border-color: rgba(155, 114, 245, 0.3);
+  border-color: color-mix(in srgb, var(--accent) 30%, transparent);
   background: var(--bg-elevated);
   transform: translateY(-1px);
 }
@@ -1215,7 +1215,7 @@ details.nav-subsection[open] > summary > .nav-arrow {
 
 .taxonomy-tag:hover {
   color: var(--accent-hover);
-  border-color: rgba(155, 114, 245, 0.3);
+  border-color: color-mix(in srgb, var(--accent) 30%, transparent);
   background: var(--bg-elevated);
 }
 

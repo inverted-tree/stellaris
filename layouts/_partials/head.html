@@ -6,5 +6,6 @@
 {{ end }}
 <meta name="color-scheme" content="dark">
 {{ partial "head/css.html" . }}
+{{ with site.Params.accentColor }}<style>:root{--accent:{{ . }};}</style>{{ end }}
 {{ if .Param "math" }}{{ partialCached "math.html" . }}{{ end }}
 {{ partial "head/js.html" . }}

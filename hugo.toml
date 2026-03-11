@@ -4,6 +4,7 @@ title = 'Stellaris'
 
 [params]
   description = 'Writing about things I build and explore.'
+  accentColor = '#f97316'  # theme accent — change to any CSS color
 
 [taxonomies]
   tag = 'tags'
