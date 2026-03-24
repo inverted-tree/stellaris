@@ -23,8 +23,15 @@ def get_posts(content_dir):
 
 def generate_qr(url, output_path):
     output_path.parent.mkdir(parents=True, exist_ok=True)
-    img = qrcode.make(url, image_factory=qrcode.image.svg.SvgPathImage, box_size=10)
+    qr = qrcode.QRCode(image_factory=qrcode.image.svg.SvgPathImage, box_size=10)
+    qr.add_data(url)
+    qr.make(fit=True)
+    img = qr.make_image()
     img.save(str(output_path))
+    # Post-process: grey fill, transparent background
+    svg = output_path.read_text()
+    svg = svg.replace('fill="#000000"', 'fill="#888888"')
+    output_path.write_text(svg)
 
 
 def main():
