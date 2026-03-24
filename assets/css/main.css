@@ -2,30 +2,30 @@
    Custom Properties
    ============================================================ */
 :root {
-  --bg:              #fafaf7;
-  --bg-sidebar:      #f0ede4;
-  --bg-surface:      #ffffff;
-  --bg-elevated:     #f5f2eb;
-  --bg-hover:        #edeae0;
-  --border:          #111111;
-  --border-light:    #555555;
+  --bg:              #111111;
+  --bg-sidebar:      #0c0c0c;
+  --bg-surface:      #1a1a1a;
+  --bg-elevated:     #222222;
+  --bg-hover:        #282828;
+  --border:          #e0e0e0;
+  --border-light:    #444444;
 
   --accent:          #9b72f5;
-  --accent-hover:    color-mix(in srgb, var(--accent), black 20%);
+  --accent-hover:    color-mix(in srgb, var(--accent), white 20%);
   --accent-dim:      color-mix(in srgb, var(--accent) 20%, transparent);
   --accent-dim2:     color-mix(in srgb, var(--accent) 10%, transparent);
 
-  --text:            #1a1a1a;
-  --text-muted:      #555555;
-  --text-faint:      #888888;
-  --heading:         #000000;
+  --text:            #c8c8c8;
+  --text-muted:      #888888;
+  --text-faint:      #555555;
+  --heading:         #f0f0f0;
 
   /* Code */
-  --code-bg:         #0d0d0d;
-  --code-border:     #111111;
-  --code-text:       #e0e0e0;
-  --inline-code-bg:  #f0e8ff;
-  --inline-code-text: #5b21b6;
+  --code-bg:         #0a0a0a;
+  --code-border:     #e0e0e0;
+  --code-text:       #cdd6f4;
+  --inline-code-bg:  #1e1530;
+  --inline-code-text: #c4a7fa;
 
   /* Syntax tokens */
   --syn-keyword:  #c084fc;
@@ -58,6 +58,8 @@
   --shadow-sm:  2px 2px 0 var(--border);
   --shadow:     4px 4px 0 var(--border);
   --shadow-lg:  6px 6px 0 var(--border);
+  --shadow-accent-sm: 2px 2px 0 var(--accent);
+  --shadow-accent:    4px 4px 0 var(--accent);
 }
 
 /* ============================================================
@@ -630,17 +632,17 @@ details.nav-subsection[open] > summary > .nav-arrow {
   font-family: var(--font-mono);
   font-weight: 700;
   color: var(--accent);
-  background: var(--bg-surface);
+  background: var(--bg-elevated);
   border: 2px solid var(--accent);
   text-decoration: none;
-  box-shadow: 2px 2px 0 var(--accent);
+  box-shadow: var(--shadow-accent-sm);
 }
 
 .tag-pill:hover {
   background: var(--accent);
   color: #fff;
   transform: translate(-1px, -1px);
-  box-shadow: 3px 3px 0 var(--accent-hover);
+  box-shadow: var(--shadow-accent);
 }
 
 /* ============================================================
@@ -989,10 +991,12 @@ details.nav-subsection[open] > summary > .nav-arrow {
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: var(--bg-surface);
-  background: var(--border);
+  color: var(--accent);
+  background: var(--bg-elevated);
+  border: 2px solid var(--accent);
   padding: 0.2rem 0.6rem;
   margin-bottom: 1.25rem;
+  box-shadow: var(--shadow-accent-sm);
 }
 
 .hero-title {
@@ -1433,9 +1437,9 @@ details.nav-subsection[open] > summary > .nav-arrow {
 .taxonomy-tag:hover {
   color: #fff;
   background: var(--accent);
-  border-color: var(--border);
+  border-color: var(--accent);
   transform: translate(-2px, -2px);
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-accent);
 }
 
 .taxonomy-tag-count {
@@ -1499,8 +1503,8 @@ details.nav-subsection[open] > summary > .nav-arrow {
   grid-column: 1 / -1;
   position: relative;
   z-index: 1;
-  background-color: var(--border);
-  color: var(--bg);
+  background-color: var(--bg-sidebar);
+  color: var(--text-faint);
   border-top: 2px solid var(--border);
   padding: 1.25rem 3rem;
   font-size: 0.79rem;
@@ -1518,13 +1522,13 @@ details.nav-subsection[open] > summary > .nav-arrow {
 }
 
 .footer-link {
-  color: rgba(255,255,255,0.6);
+  color: var(--text-faint);
   text-decoration: none;
   font-weight: 600;
 }
 
 .footer-link:hover {
-  color: #fff;
+  color: var(--text-muted);
 }
 
 /* ============================================================
