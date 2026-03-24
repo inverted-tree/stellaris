@@ -285,10 +285,12 @@ body::after {
 }
 
 .nav-link > span {
-  display: block;
+  display: inline-block;
+  max-width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  vertical-align: top;
 }
 
 .nav-link:hover {
@@ -354,10 +356,12 @@ details.nav-subsection[open] > summary > .nav-arrow {
 }
 
 .nav-summary-link > span {
-  display: block;
+  display: inline-block;
+  max-width: 100%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  vertical-align: top;
 }
 
 .nav-summary-link.nav-link--active {
@@ -369,10 +373,11 @@ details.nav-subsection[open] > summary > .nav-arrow {
   100% { transform: translateX(var(--_scroll, 0px)); }
 }
 
-.nav-link:hover > span,
-.nav-summary-link:hover > span {
+.nav-link.nav-scrolling > span,
+.nav-summary-link.nav-scrolling > span {
+  overflow: visible;   /* parent link now does the clipping */
   text-overflow: clip;
-  animation: nav-scroll 1.8s ease-in-out 0.3s forwards;
+  animation: nav-scroll 1.8s ease-in-out forwards;
 }
 
 .nav-divider {
