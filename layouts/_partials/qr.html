@@ -1,4 +1,6 @@
-{{ $qrPath := printf "/qr%s.svg" (strings.TrimRight "/" .RelPermalink) }}
+{{ $filePath := strings.TrimSuffix ".md" .File.Path }}
+{{ $filePath = strings.TrimSuffix "/index" $filePath }}
+{{ $qrPath := printf "/qr/%s.svg" $filePath }}
 <div class="post-qr">
   <img src="{{ $qrPath }}" alt="QR code for this post" class="post-qr-code">
   <span class="post-qr-label">Scan to share</span>
