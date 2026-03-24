@@ -724,6 +724,10 @@ details.nav-subsection[open] > summary > .nav-arrow {
   pointer-events: none;
 }
 
+.series-posts-list:has(.series-post-link:not(.series-post-link--current):hover) .series-post-link--current {
+  box-shadow: none;
+}
+
 .series-post-num {
   font-family: var(--font-mono);
   font-size: 0.675rem;
