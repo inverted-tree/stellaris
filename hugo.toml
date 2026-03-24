@@ -6,7 +6,7 @@ cleanDestinationDir = true
 [params]
   description = 'A minimal Hugo theme for technical writing — dark, opinionated, and easy to configure.'
   heroTitle = 'your next Hugo site.'
-  accentColor = '#6b9cf8'       # theme accent — change to any CSS color
+  accentColor = '#7C3AED'       # theme accent — change to any CSS color
   featuredProject = 'ray-tracer'  # slug of the project to feature on the home page
 
   # Fonts — must match a @font-face family name declared in assets/css/fonts.css
