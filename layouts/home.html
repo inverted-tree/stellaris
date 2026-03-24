@@ -14,8 +14,8 @@
   <p class="hero-subtitle">{{ . }}</p>
   {{ end }}
   <div class="hero-actions">
-    {{ with site.GetPage "/projects" }}
-    <a href="{{ .RelPermalink }}" class="btn btn--primary">{{ site.Params.heroProjectsLabel | default "Browse Projects" }}</a>
+    {{ with site.GetPage "/topics" }}
+    <a href="{{ .RelPermalink }}" class="btn btn--primary">{{ site.Params.heroTopicsLabel | default "Browse Topics" }}</a>
     {{ end }}
     {{ with site.GetPage "/posts" }}
     <a href="{{ .RelPermalink }}" class="btn btn--secondary">{{ site.Params.heroPostsLabel | default "Read Posts" }}</a>
@@ -23,20 +23,20 @@
   </div>
 </section>
 
-{{/* Featured project + Latest post — two equal cards */}}
+{{/* Featured topic + Latest post — two equal cards */}}
 <div class="home-cards">
 
-  {{ with site.GetPage "/projects" }}
+  {{ with site.GetPage "/topics" }}
     {{ $sections := .Sections.ByWeight }}
     {{ $featured := index $sections 0 }}
-    {{ with site.Params.featuredProject }}
-      {{ with site.GetPage (printf "/projects/%s" .) }}
+    {{ with site.Params.featuredTopic }}
+      {{ with site.GetPage (printf "/topics/%s" .) }}
         {{ $featured = . }}
       {{ end }}
     {{ end }}
     {{ with $featured }}
     <a href="{{ .RelPermalink }}" class="home-card home-card--featured">
-      <div class="home-card-label">{{ site.Params.homeFeaturedLabel | default "Featured Project" }}</div>
+      <div class="home-card-label">{{ site.Params.homeFeaturedLabel | default "Featured Topic" }}</div>
       <h2 class="home-card-title">{{ .Title }}</h2>
       {{ with .Description }}
       <p class="home-card-desc">{{ . }}</p>
@@ -86,13 +86,13 @@
 </section>
 {{ end }}
 
-{{/* Projects grid */}}
-{{ with site.GetPage "/projects" }}
+{{/* Topics grid */}}
+{{ with site.GetPage "/topics" }}
   {{ $sections := .Sections.ByWeight }}
   {{ if $sections }}
   <section class="home-projects">
     <div class="home-section-header">
-      <h2 class="home-section-title">Projects</h2>
+      <h2 class="home-section-title">Topics</h2>
       <a href="{{ .RelPermalink }}" class="home-section-link">View all →</a>
     </div>
     <div class="home-projects-grid">

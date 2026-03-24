@@ -1,0 +1,81 @@
+baseURL = 'https://xn--c1adtlmkl.cc/'
+languageCode = 'en-US'
+title = 'сегфолт.cc'
+copyright = 'Lukas Schröder'
+cleanDestinationDir = true
+
+[Author]
+  name = 'Lukas Schröder'
+
+[params]
+  description   = 'This is where I yap about technology. I am developing a theme for this site as I write my first posts.'
+  heroTitle     = 'a CI/CD pipeline for my thoughts.'
+  accentColor   = '#6b9cf8'        # change to taste
+  featuredProject = ''             # set to a project slug once you have one
+
+  # Fonts — comment out to use system fonts
+  # fontSans = 'IBM Plex Sans'
+  # fontMono = 'IBM Plex Mono'
+
+  # Navigation labels
+  homeLabel = 'Home'
+  tagsLabel = 'Tags'
+
+  # Hero
+  heroProjectsLabel = 'Browse Projects'
+  heroPostsLabel    = 'Read Posts'
+
+  # Bento grid
+  homeFeaturedLabel    = 'Featured Project'
+  homeLatestPostLabel  = 'Latest Post'
+  homeRecentPostsLabel = 'Recent Posts'
+  homeProjectLabel     = 'Project'
+  homeViewAllLabel     = 'View all →'
+  homeNoPostsText      = 'No posts yet.'
+
+  # Series strip
+  seriesLabel = 'Part of'
+
+  # Footer
+  footerText     = 'A CI/CD pipeline for my thoughts.'
+  footerLinkText = 'Lukas Schröder'
+  footerLinkURL  = 'https://xn--c1adtlmkl.cc/'
+
+  # 404
+  notFoundTitle    = 'Page not found'
+  notFoundMessage  = "The page you're looking for doesn't exist or has been moved."
+  notFoundLinkText = 'Go home'
+
+[taxonomies]
+  tag = 'tags'
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.extensions]
+      [markup.goldmark.extensions.passthrough]
+        enable = true
+        [markup.goldmark.extensions.passthrough.delimiters]
+          block  = [['$$', '$$'], ['\[', '\]']]
+          inline = [['$', '$'], ['\(', '\)']]
+    [markup.goldmark.renderer]
+      unsafe = false
+  [markup.highlight]
+    noClasses   = false
+    codeFences  = true
+    guessSyntax = true
+    lineNos     = false
+    tabWidth    = 2
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel   = 4
+    ordered    = false
+
+[module]
+  [module.hugoVersion]
+    extended = false
+    min      = '0.146.0'
+  [[module.imports]]
+    path = 'github.com/inverted-tree/stellaris'
+  [[module.mounts]]
+    source = 'assets'
+    target = 'assets'

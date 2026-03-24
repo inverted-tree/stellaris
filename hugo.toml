@@ -7,7 +7,7 @@ cleanDestinationDir = true
   description = 'A minimal Hugo theme for technical writing — dark, opinionated, and easy to configure.'
   heroTitle = 'your next Hugo site.'
   accentColor = '#7C3AED'       # theme accent — change to any CSS color
-  featuredProject = 'ray-tracer'  # slug of the project to feature on the home page
+  featuredTopic = 'ray-tracer'  # slug of the topic to feature on the home page
 
   # Fonts — must match a @font-face family name declared in assets/css/fonts.css
   # Remove or comment out to fall back to system fonts
@@ -20,14 +20,14 @@ cleanDestinationDir = true
 
   # Hero / landing page
   heroPrefix = 'Built for'
-  heroProjectsLabel = 'Browse Projects'
+  heroTopicsLabel = 'Browse Topics'
   heroPostsLabel    = 'Read Posts'
 
   # Bento grid labels
-  homeFeaturedLabel   = 'Featured Project'
+  homeFeaturedLabel   = 'Featured Topic'
   homeLatestPostLabel = 'Latest Post'
   homeRecentPostsLabel = 'Recent Posts'
-  homeProjectLabel    = 'Project'
+  homeTopicLabel      = 'Topic'
   homeViewAllLabel    = 'View all →'
   homeNoPostsText     = 'No posts yet.'
 

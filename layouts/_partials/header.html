@@ -3,7 +3,7 @@
 <div class="topbar-spacer"></div>
 
 <nav class="topbar-links" aria-label="Main navigation">
-  {{ with site.GetPage "/projects" }}
+  {{ with site.GetPage "/topics" }}
   <a href="{{ .RelPermalink }}" class="topbar-link">{{ .Title }}</a>
   {{ end }}
   {{ with site.GetPage "/posts" }}
