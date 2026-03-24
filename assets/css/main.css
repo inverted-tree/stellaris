@@ -281,6 +281,11 @@ body::after {
   text-decoration: none;
   border: 2px solid transparent;
   line-height: 1.4;
+  overflow: hidden;
+}
+
+.nav-link > span {
+  display: block;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -345,12 +350,29 @@ details.nav-subsection[open] > summary > .nav-arrow {
   text-decoration: none;
   flex: 1;
   overflow: hidden;
-  text-overflow: ellipsis;
+  min-width: 0;
+}
+
+.nav-summary-link > span {
+  display: block;
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .nav-summary-link.nav-link--active {
   color: var(--accent);
+}
+
+@keyframes nav-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(var(--_scroll, 0px)); }
+}
+
+.nav-link:hover > span,
+.nav-summary-link:hover > span {
+  text-overflow: clip;
+  animation: nav-scroll 1.8s ease-in-out 0.3s forwards;
 }
 
 .nav-divider {
