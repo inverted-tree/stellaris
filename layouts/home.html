@@ -23,9 +23,9 @@
   </div>
 </section>
 
-<div class="bento-grid">
+{{/* Featured project + Latest post — two equal cards */}}
+<div class="home-cards">
 
-  {{/* Row 1: featured project (2 cols) + latest post (1 col) */}}
   {{ with site.GetPage "/projects" }}
     {{ $sections := .Sections.ByWeight }}
     {{ $featured := index $sections 0 }}
@@ -35,15 +35,15 @@
       {{ end }}
     {{ end }}
     {{ with $featured }}
-    <a href="{{ .RelPermalink }}" class="bento-card bento-card--featured">
-      <div class="bento-card-eyebrow">{{ site.Params.homeFeaturedLabel | default "Featured Project" }}</div>
-      <h2 class="bento-card-title">{{ .Title }}</h2>
+    <a href="{{ .RelPermalink }}" class="home-card home-card--featured">
+      <div class="home-card-label">{{ site.Params.homeFeaturedLabel | default "Featured Project" }}</div>
+      <h2 class="home-card-title">{{ .Title }}</h2>
       {{ with .Description }}
-      <p class="bento-card-desc">{{ . }}</p>
+      <p class="home-card-desc">{{ . }}</p>
       {{ end }}
-      <div class="bento-card-footer">
-        <span class="bento-card-count">{{ len .RegularPages }} posts</span>
-        <span class="bento-card-arrow">→</span>
+      <div class="home-card-footer">
+        <span class="home-card-count">{{ len .RegularPages }} posts</span>
+        <span class="home-card-arrow">→</span>
       </div>
     </a>
     {{ end }}
@@ -51,85 +51,66 @@
 
   {{ with site.GetPage "/posts" }}
     {{ with (index (.RegularPages.ByDate.Reverse) 0) }}
-    <a href="{{ .RelPermalink }}" class="bento-card bento-card--latest">
-      <div class="bento-card-eyebrow">{{ site.Params.homeLatestPostLabel | default "Latest Post" }}</div>
-      <h2 class="bento-card-title">{{ .Title }}</h2>
+    <a href="{{ .RelPermalink }}" class="home-card home-card--latest">
+      <div class="home-card-label">{{ site.Params.homeLatestPostLabel | default "Latest Post" }}</div>
+      <h2 class="home-card-title">{{ .Title }}</h2>
       {{ with .Description }}
-      <p class="bento-card-desc">{{ . }}</p>
+      <p class="home-card-desc">{{ . }}</p>
       {{ end }}
-      <time class="bento-card-date">{{ .Date.Format "Jan 2, 2006" }}</time>
+      <time class="home-card-date">{{ .Date.Format "Jan 2, 2006" }}</time>
     </a>
     {{ end }}
   {{ end }}
 
-  {{/* Row 2: recent posts full width */}}
-  {{ $postsPage := site.GetPage "/posts" }}
-  <div class="bento-card bento-card--posts">
-    <div class="bento-posts-header">
-      <span class="bento-card-eyebrow">{{ site.Params.homeRecentPostsLabel | default "Recent Posts" }}</span>
-      {{ with $postsPage }}<a href="{{ .RelPermalink }}" class="bento-posts-link">{{ site.Params.homeViewAllLabel | default "View all →" }}</a>{{ end }}
+</div>
+
+{{/* Recent posts list */}}
+{{ $postsPage := site.GetPage "/posts" }}
+{{ $allPosts := slice }}
+{{ with $postsPage }}{{ $allPosts = .RegularPages.ByDate.Reverse }}{{ end }}
+{{ $rest := after 1 $allPosts }}
+{{ if $rest }}
+<section class="home-posts">
+  <div class="home-section-header">
+    <h2 class="home-section-title">{{ site.Params.homeRecentPostsLabel | default "Recent Posts" }}</h2>
+    {{ with $postsPage }}<a href="{{ .RelPermalink }}" class="home-section-link">{{ site.Params.homeViewAllLabel | default "View all →" }}</a>{{ end }}
+  </div>
+  <div class="home-post-list">
+    {{ range first 5 $rest }}
+    <a href="{{ .RelPermalink }}" class="home-post-item">
+      <span class="home-post-title">{{ .Title }}</span>
+      <time class="home-post-date">{{ .Date.Format "Jan 2, 2006" }}</time>
+    </a>
+    {{ end }}
+  </div>
+</section>
+{{ end }}
+
+{{/* Projects grid */}}
+{{ with site.GetPage "/projects" }}
+  {{ $sections := .Sections.ByWeight }}
+  {{ if $sections }}
+  <section class="home-projects">
+    <div class="home-section-header">
+      <h2 class="home-section-title">Projects</h2>
+      <a href="{{ .RelPermalink }}" class="home-section-link">View all →</a>
     </div>
-    <div class="bento-posts-list">
-      {{ $allPosts := slice }}
-      {{ with $postsPage }}{{ $allPosts = .RegularPages.ByDate.Reverse }}{{ end }}
-      {{ $rest := after 1 $allPosts }}
-      {{ if $rest }}
-        {{ range first 4 $rest }}
-        <a href="{{ .RelPermalink }}" class="bento-post-row">
-          <div class="bento-post-main">
-            <span class="bento-post-title">{{ .Title }}</span>
-            <time class="bento-post-date">{{ .Date.Format "Jan 2, 2006" }}</time>
-          </div>
-          {{ with .Description }}
-          <p class="bento-post-desc">{{ . }}</p>
-          {{ end }}
-        </a>
+    <div class="home-projects-grid">
+      {{ range $sections }}
+      <a href="{{ .RelPermalink }}" class="home-project-card">
+        <h3 class="home-project-title">{{ .Title }}</h3>
+        {{ with .Description }}
+        <p class="home-project-desc">{{ . }}</p>
         {{ end }}
-      {{ else }}
-        <span class="bento-posts-empty">{{ site.Params.homeNoPostsText | default "No posts yet." }}</span>
+        <div class="home-project-footer">
+          <span class="home-project-count">{{ len .RegularPages }} posts</span>
+          <span class="home-project-arrow">→</span>
+        </div>
+      </a>
       {{ end }}
     </div>
-  </div>
-
-  {{/* Row 3: projects ticker */}}
-  {{ with site.GetPage "/projects" }}
-    {{ $sections := .Sections.ByWeight }}
-    {{ if $sections }}
-    {{ $duration := printf "%.1fs" (mul (float (len $sections)) 10.0) }}
-    <div class="projects-ticker" style="--ticker-duration: {{ $duration }}">
-      <div class="projects-track">
-        {{ range $sections }}
-        <a href="{{ .RelPermalink }}" class="bento-card ticker-card">
-          <div class="bento-card-eyebrow">{{ site.Params.homeProjectLabel | default "Project" }}</div>
-          <h2 class="bento-card-title">{{ .Title }}</h2>
-          {{ with .Description }}
-          <p class="bento-card-desc">{{ . }}</p>
-          {{ end }}
-          <div class="bento-card-footer">
-            <span class="bento-card-count">{{ len .RegularPages }} posts</span>
-            <span class="bento-card-arrow">→</span>
-          </div>
-        </a>
-        {{ end }}
-        {{/* Duplicate for seamless loop */}}
-        {{ range $sections }}
-        <a href="{{ .RelPermalink }}" class="bento-card ticker-card" aria-hidden="true" tabindex="-1">
-          <div class="bento-card-eyebrow">{{ site.Params.homeProjectLabel | default "Project" }}</div>
-          <h2 class="bento-card-title">{{ .Title }}</h2>
-          {{ with .Description }}
-          <p class="bento-card-desc">{{ . }}</p>
-          {{ end }}
-          <div class="bento-card-footer">
-            <span class="bento-card-count">{{ len .RegularPages }} posts</span>
-            <span class="bento-card-arrow">→</span>
-          </div>
-        </a>
-        {{ end }}
-      </div>
-    </div>
-    {{ end }}
+  </section>
   {{ end }}
-
-</div>
+{{ end }}
 
 {{ end }}
