@@ -1016,7 +1016,7 @@ details.nav-subsection[open] > summary > .nav-arrow {
 .hero-title {
   font-size: clamp(2.5rem, 6vw, 3.75rem);
   font-weight: 900;
-  color: var(--heading);
+  color: #ffffff;
   line-height: 1.1;
   letter-spacing: -0.04em;
   margin: 0 0 1.25rem;
