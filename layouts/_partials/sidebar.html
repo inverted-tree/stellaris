@@ -6,7 +6,7 @@
     {{/* Home link */}}
     <li>
       <a href="{{ "/" | relURL }}" class="nav-link{{ if .IsHome }} nav-link--active{{ end }}">
-        <span>{{ site.Params.homeLabel | default "Home" }}</span>
+        {{ site.Params.homeLabel | default "Home" }}
       </a>
     </li>
 
@@ -32,14 +32,14 @@
                 <path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
               <a href="{{ $sub.RelPermalink }}" class="nav-summary-link{{ if eq $currentPage $sub }} nav-link--active{{ end }}">
-                <span>{{ $sub.Title }}</span>
+                {{ $sub.Title }}
               </a>
             </summary>
             <ul class="nav-list nav-list--deep">
               {{ range $sub.RegularPages.ByDate }}
               <li>
                 <a href="{{ .RelPermalink }}" class="nav-link{{ if eq $currentPage . }} nav-link--active{{ end }}">
-                  <span>{{ .Title }}</span>
+                  {{ .Title }}
                 </a>
               </li>
               {{ end }}
@@ -65,7 +65,7 @@
 
     <li>
       <a href="{{ "/tags/" | relURL }}" class="nav-link{{ if eq .Section "tags" }} nav-link--active{{ end }}">
-        <span>{{ site.Params.tagsLabel | default "Tags" }}</span>
+        {{ site.Params.tagsLabel | default "Tags" }}
       </a>
     </li>
 
