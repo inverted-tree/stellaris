@@ -14,7 +14,11 @@ def get_posts(content_dir):
         if md.name == "_index.md":
             continue
         rel = md.relative_to(content_dir)
-        yield str(rel.with_suffix(""))  # e.g. posts/post-1
+        if md.stem == "index":
+            # page bundle: content/posts/foo/index.md → posts/foo
+            yield str(rel.parent)
+        else:
+            yield str(rel.with_suffix(""))  # e.g. posts/post-1
 
 
 def generate_qr(url, output_path):
