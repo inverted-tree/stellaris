@@ -1,0 +1,12 @@
+<figure class="prose-figure">
+  <img
+    src="{{ .Get "src" }}"
+    alt="{{ .Get "alt" }}"
+    {{ with .Get "width" }}width="{{ . }}"{{ end }}
+    {{ with .Get "height" }}height="{{ . }}"{{ end }}
+    loading="lazy"
+  >
+  {{ with .Get "caption" }}
+  <figcaption>{{ . }}</figcaption>
+  {{ end }}
+</figure>

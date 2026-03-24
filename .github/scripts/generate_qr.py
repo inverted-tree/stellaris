@@ -2,6 +2,7 @@
 """Generate QR code SVGs for all Hugo posts."""
 
 import sys
+import shutil
 from pathlib import Path
 
 import qrcode
@@ -39,6 +40,7 @@ def main():
     repo_root = Path(__file__).resolve().parent.parent.parent
     content_dir = repo_root / "content"
     static_qr_dir = repo_root / "static" / "qr"
+    shutil.rmtree(static_qr_dir, ignore_errors=True)
 
     for url_path in get_posts(content_dir):
         post_url = f"{base_url}/{url_path}/"

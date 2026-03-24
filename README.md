@@ -164,7 +164,7 @@ QR codes are generated as SVGs at build time by `.github/scripts/generate_qr.py`
 Install the dependency once:
 
 ```sh
-pip install "qrcode[svg]"
+python -m pip install -r requirements-qr.txt
 ```
 
 Then run the script with your site's base URL:
@@ -181,7 +181,7 @@ static/qr/
   topics/my-topic/01-intro.svg
 ```
 
-Run the script whenever you add or rename posts, then `hugo server` as normal. The `static/qr/` directory is gitignored since it's a build artifact.
+Run the script whenever you add or rename posts, then `hugo server` as normal. The deploy workflow does this automatically on GitHub Actions before building the site. The `static/qr/` directory is gitignored since it's a build artifact.
 
 ## Fonts
 
