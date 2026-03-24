@@ -1,7 +1,10 @@
 {{ $filePath := strings.TrimSuffix ".md" .File.Path }}
 {{ $filePath = strings.TrimSuffix "/index" $filePath }}
-{{ $qrPath := printf "/qr/%s.svg" $filePath }}
+{{ $qrPath := printf "qr/%s.svg" $filePath | relURL }}
+{{ $qrFile := printf "static/qr/%s.svg" $filePath }}
+{{ if os.FileExists $qrFile }}
 <div class="post-qr">
   <img src="{{ $qrPath }}" alt="QR code for this post" class="post-qr-code">
   <span class="post-qr-label">Scan to share</span>
 </div>
+{{ end }}

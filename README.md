@@ -48,18 +48,18 @@ Two content types, kept separate:
 ```
 content/
   posts/           # standalone posts
-  projects/
-    my-project/
-      _index.md    # project metadata
+  topics/
+    my-topic/
+      _index.md    # topic metadata
       01-intro.md  # series posts
       02-part2.md
 ```
 
 **Standalone posts** show up in the feed and on the home page. No fuss.
 
-**Project series** group related posts under a project. Each post gets a series strip at the bottom linking to the others — but only if the project has more than one post.
+**Topic series** group related posts under a topic. Each post gets a series strip at the bottom linking to the others — but only if the topic has more than one post.
 
-Use `weight` on a project's `_index.md` to control the order they appear in navigation and on the home page.
+Use `weight` on a topic's `_index.md` to control the order they appear in navigation and on the home page.
 
 ### Front matter
 
@@ -93,7 +93,7 @@ title   = 'My Site'
   description    = 'A site about things I build.'
   heroTitle      = 'your next Hugo site.'   # typewriter text on the home page
   accentColor    = '#6b9cf8'                # any CSS color
-  featuredProject = 'my-project'            # slug of the project pinned on the home page
+  featuredTopic  = 'my-topic'               # slug of the topic pinned on the home page
   fontSans       = 'IBM Plex Sans'          # must match a @font-face family in fonts.css
   fontMono       = 'IBM Plex Mono'
 ```
@@ -117,9 +117,9 @@ Every user-facing string has a sensible default and can be overridden:
   homeLabel        = 'Home'
   tagsLabel        = 'Tags'
   heroPrefix       = 'Built for'
-  heroProjectsLabel  = 'Browse Projects'
+  heroTopicsLabel    = 'Browse Topics'
   heroPostsLabel     = 'Read Posts'
-  homeFeaturedLabel  = 'Featured Project'
+  homeFeaturedLabel  = 'Featured Topic'
   homeLatestPostLabel  = 'Latest Post'
   homeRecentPostsLabel = 'Recent Posts'
   homeViewAllLabel   = 'View all →'
@@ -133,7 +133,7 @@ Every user-facing string has a sensible default and can be overridden:
   notFoundLinkText   = 'Go home'
 ```
 
-Section nav labels (Projects, Posts) are read from each section's `_index.md` title — rename the file, rename the nav entry.
+Section nav labels (Topics, Posts) are read from each section's `_index.md` title — rename the file, rename the nav entry.
 
 ## Math
 
@@ -178,7 +178,7 @@ This populates `static/qr/` with one SVG per post, mirroring the content structu
 ```
 static/qr/
   posts/post-1.svg
-  projects/my-project/01-intro.svg
+  topics/my-topic/01-intro.svg
 ```
 
 Run the script whenever you add or rename posts, then `hugo server` as normal. The `static/qr/` directory is gitignored since it's a build artifact.

@@ -5,12 +5,12 @@
 
     {{/* Home link */}}
     <li>
-      <a href="{{ "/" | relURL }}" class="nav-link{{ if .IsHome }} nav-link--active{{ end }}">
+      <a href="{{ site.Home.RelPermalink }}" class="nav-link{{ if .IsHome }} nav-link--active{{ end }}">
         {{ site.Params.homeLabel | default "Home" }}
       </a>
     </li>
 
-    {{/* Top-level sections (Projects, Posts, etc.) */}}
+    {{/* Top-level sections (Topics, Posts, etc.) */}}
     {{ range site.Sections.ByWeight }}
     {{ $section := . }}
     {{ $isActive := or (eq $currentPage $section) ($currentPage.IsDescendant $section) }}
@@ -20,7 +20,7 @@
 
       <ul class="nav-list nav-list--nested">
 
-        {{/* Sub-sections: e.g. individual projects within /projects/ */}}
+        {{/* Sub-sections: e.g. individual topics within /topics/ */}}
         {{ range $section.Sections.ByWeight }}
         {{ $sub := . }}
         {{ $subActive := or (eq $currentPage $sub) ($currentPage.IsDescendant $sub) }}
@@ -64,9 +64,11 @@
     <li><div class="nav-divider"></div></li>
 
     <li>
-      <a href="{{ "/tags/" | relURL }}" class="nav-link{{ if eq .Section "tags" }} nav-link--active{{ end }}">
+      {{ with site.GetPage "/tags" }}
+      <a href="{{ .RelPermalink }}" class="nav-link{{ if or (eq $currentPage.Section "tags") (eq $currentPage.Kind "taxonomy") (eq $currentPage.Kind "term") }} nav-link--active{{ end }}">
         {{ site.Params.tagsLabel | default "Tags" }}
       </a>
+      {{ end }}
     </li>
 
   </ul>

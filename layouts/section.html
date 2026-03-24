@@ -10,7 +10,7 @@
     {{ end }}
   </header>
 
-  {{/* Sub-sections: e.g. individual projects listed on the /projects/ page */}}
+  {{/* Sub-sections: e.g. individual topics listed on the /topics/ page */}}
   {{ if .Sections }}
   <div class="subsection-list">
     {{ range .Sections.ByWeight }}
@@ -25,7 +25,7 @@
   </div>
   {{ end }}
 
-  {{/* Direct pages: e.g. posts within a project, or standalone posts */}}
+  {{/* Direct pages: e.g. posts within a topic, or standalone posts */}}
   {{ if .RegularPages }}
   <div class="post-card-list">
     {{ range $i, $p := .RegularPages.ByDate }}

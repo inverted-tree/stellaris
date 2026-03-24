@@ -1,4 +1,4 @@
-{{/* Show a series strip when the post lives inside a project sub-section
+{{/* Show a series strip when the post lives inside a topic sub-section
      (i.e. its parent section has more than one post) */}}
 {{ $page := . }}
 {{ if and .Parent (not .Parent.IsHome) .Parent.IsSection .Parent.Parent (not .Parent.Parent.IsHome) }}

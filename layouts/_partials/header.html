@@ -1,4 +1,4 @@
-<a href="{{ "/" | relURL }}" class="site-logo">{{ site.Title }}</a>
+<a href="{{ site.Home.RelPermalink }}" class="site-logo">{{ site.Title }}</a>
 
 <div class="topbar-spacer"></div>
 
@@ -9,7 +9,9 @@
   {{ with site.GetPage "/posts" }}
   <a href="{{ .RelPermalink }}" class="topbar-link">{{ .Title }}</a>
   {{ end }}
-  <a href="{{ "/tags/" | relURL }}" class="topbar-link">{{ site.Params.tagsLabel | default "Tags" }}</a>
+  {{ with site.GetPage "/tags" }}
+  <a href="{{ .RelPermalink }}" class="topbar-link">{{ site.Params.tagsLabel | default "Tags" }}</a>
+  {{ end }}
 </nav>
 
 <button class="sidebar-toggle-btn" aria-label="Toggle navigation" onclick="document.getElementById('sidebar-toggle').checked = !document.getElementById('sidebar-toggle').checked">
